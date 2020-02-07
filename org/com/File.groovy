@@ -1,4 +1,4 @@
-package org.foo
+package org.com
 
 //every file in a pipeline is an object
 //a file always has a name and it lies in a node's directory
