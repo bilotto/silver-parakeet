@@ -1,4 +1,4 @@
-package org.foo
+package org.com
 
 //the class reads the properties file through its methods
 

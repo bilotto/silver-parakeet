@@ -1,5 +1,5 @@
-import org.foo.Node
-import org.foo.Container
+import org.com.Node
+import org.com.Container
 
 def call(String name, Node node, String from_image, String base_dir) {
 	Container container = new Container()

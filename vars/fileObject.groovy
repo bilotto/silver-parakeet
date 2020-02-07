@@ -1,5 +1,5 @@
-import org.foo.File
-import org.foo.Node
+import org.com.File
+import org.com.Node
 
 def call(String name, Node node, String directory) {
 	file = new File()

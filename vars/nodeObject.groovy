@@ -1,5 +1,5 @@
-import org.foo.Node
-import org.foo.Properties
+import org.com.Node
+import org.com.Properties
 
 def call(String user, String hostname, String base_dir, Node jump_server){
 	Node node = new Node()

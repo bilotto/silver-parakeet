@@ -1,4 +1,4 @@
-package org.foo
+package org.com
 
 buildAndTransferEnv
 
