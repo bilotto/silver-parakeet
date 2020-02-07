@@ -1,4 +1,4 @@
-import org.foo.Properties
+import org.com.Properties
 
 def call(properties_map) {
 	Properties properties = new Properties()
