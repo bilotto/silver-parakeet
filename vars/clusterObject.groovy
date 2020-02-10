@@ -1,4 +1,4 @@
-import org.foo.Cluster
+import org.com.Cluster
 
 def call(Map node_objects, String role){
 

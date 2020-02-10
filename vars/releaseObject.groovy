@@ -1,5 +1,5 @@
-import org.foo.Release
-import org.foo.Node
+import org.com.Release
+import org.com.Node
 
 def call(String name, String git_branch, String git_tag, String images, Node git_node, LinkedHashMap git_properties) {
 	Release release = new Release()
