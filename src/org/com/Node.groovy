@@ -93,13 +93,6 @@ def copy_file_to_node(file, String destination_dir) {
   	}
 }
 
-def copy_file_from_node(File file, Node dest_node) {
-
-
-
-
-}
-
 
 //it takes as input the build object, that is, the buildEnv map
 def copy_release(Release release, File release_file) {
