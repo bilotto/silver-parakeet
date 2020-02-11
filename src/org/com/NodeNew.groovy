@@ -23,12 +23,12 @@ class NodeNew {
 	}
 	
 	void execute(String command) {
-		returnOutput = false
+		def returnOutput = false
 		this.executeCommand(command, returnOutput)
 	}
 	
 	void executeAndGetOutput(String command) {
-		returnOutput = true
+		def returnOutput = true
 		return this.executeCommand(command, returnOutput)
 	}
 	
