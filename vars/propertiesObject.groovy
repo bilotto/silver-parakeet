@@ -1,23 +1,73 @@
-import org.com.Properties
+import org.com.PropertiesNew
 
-def call(properties_map) {
-	Properties properties = new Properties()
-	properties.construct(properties_map)
-	return properties
+def call(propertiesMap) {
+	return new PropertiesNew(propertiesMap)
 }
 
-def generate_properties_map_old(properties_files_dir){
-	properties_files = sh (returnStdout: true, script: "ls ${properties_files_dir}")
-	properties_map = [ : ]
-	properties_files.tokenize("\n").each { fileName ->
-		dot_char = fileName.indexOf(".")
-		key = fileName[ 0..(dot_char - 1) ].toUpperCase()
-		writeFile(file: "${fileName}", text: libraryResource("org/foo/${fileName}"), encoding: "UTF-8")
-		yaml_map = readYaml file: "${fileName}"
-		//todo: check the filename and mapkey relation
-		properties_map.put(key, yaml_map.get(key))
+Map loadPropertiesFromLibrary(String libraryName) {
+	jenkinsWorkspaceDir = env.JENKINS_HOME + "/" + "workspace"
+	librariesDirectory =  jenkinsWorkspaceDir + "/" + "${env.JOB_NAME}@libs"
+	libraryDirectory = librariesDirectory + "/" + libraryName
+	resourcesFolder = libraryDirectory + "/resources"
+	propertiesDirectory = resourcesFolder + "/" + "properties"
+	propertiesFiles = this.listPropertiesFiles(propertiesDirectory)
+	return this.generatePropertiesMap(propertiesFiles)
+}
+
+List listPropertiesFiles(propertiesFilesPath) {
+	command = "cd ${propertiesFilesPath}; find . -type f"
+	properties_files = tools.executeLocalCommand(command, true)
+	list = [  ]
+	properties_files.tokenize("\n").each { fileRelativePath ->
+		//remove ./ from the bash's output
+		fileRelativePath = fileRelativePath.drop("./".length())
+		list.put(fileRelativePath)
 	}
-	return properties_map
+	return list
+}
+
+//this functions generates the propertiesMap following the properties folder structure
+Map generatePropertiesMap(propertiesFiles) {
+	propertiesMap = [ : ]
+	
+	propertiesFiles.each { fileRelativePath ->
+		fileDir = "properties/"
+		baseMap = propertiesMap
+		slashChar = fileRelativePath.indexOf("/")
+		lastItKey = null
+
+		while (slashChar != -1) {
+			folder = fileRelativePath[ 0..(slashChar - 1) ]
+			key = folder.toUpperCase()
+			fileDir = fileDir + "/" + folder
+			if (!lastItKey) {
+				if (!propertiesMap.get(key)) {
+					propertiesMap.put(key, [:])
+				}
+				baseMap = propertiesMap.get(key)
+			} else {
+				baseMap = propertiesMap.get(lastItKey)
+				if (!baseMap.get(key)) {
+					baseMap.put(key, [:])
+				}
+				baseMap = baseMap.get(key)
+			}
+			fileRelativePath = fileRelativePath.drop("${key}/".length())
+			slashChar = fileRelativePath.indexOf("/")
+			lastItKey = key
+		}
+		fileName = fileRelativePath
+		dotChar = fileName.indexOf(".")
+		key = fileName[ 0..(dotChar - 1) ].toUpperCase()
+		writeFile(file: "${fileName}", text: libraryResource("${fileDir}/${fileName}"), encoding: "UTF-8")
+		yamlMap = readYaml file: "${fileName}"
+		if (!yamlMap.get(key)) {
+			error "Properties file ${fileDir}/${fileName} must contain the same name as its first key"
+		}
+		baseMap.put(key, yamlMap.get(key))
+		tools.executeLocalCommand("rm ${fileName}", false)
+	}
+	return propertiesMap
 }
 
 def generate_properties_map(properties_files_dir){
@@ -61,8 +111,6 @@ def generate_properties_map(properties_files_dir){
 			error "Properties file ${fileRelativePath} must contain the same name as its first key"
 		}
 		base_map.put(key, yaml_map.get(key))
-
-
 	}
 	return properties_map
 }

@@ -132,5 +132,16 @@ def copy_file_to_node_bkp(file_path, remote_user, remote_hostname, destination_d
 
 }
 
+def executeLocalCommand(command, returnOutput){
+	command = this.make_command(command)
+	if (return_output) {
+	       stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+	       return stdout
+	} else {
+	      sh "${cmd}"
+  	}
+}
+
+
 
 return this
