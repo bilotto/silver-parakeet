@@ -26,8 +26,7 @@ Map createNodeObjectsFromList(nodeListId, properties){
 	nodeIdList = properties.getNodeList(nodeListId)
 	nodeObjects = [ : ]
 	nodeIdList.each { nodeId ->
-		node = this.createNodeObject(nodeId, properties)
-		nodeObjects.put(nodeId, node)
+		nodeObjects.put(nodeId, this.createNodeObject(nodeId, properties))
 	}
 	return nodeObjects
 }
