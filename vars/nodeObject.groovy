@@ -1,11 +1,11 @@
 import org.com.NodeNew
 import org.com.PropertiesNew
 
-def call(String user, String hostname, String base_dir, Node jump_server){
-	return new NodeNew(user, hostname, base_dir, jump_server)
+def call(String user, String hostname, String homeDir, NodeNew jpNode){
+	return new NodeNew(user, hostname, homeDir, jpNode)
 }
 
-Node createNodeObject(String nodeId, PropertiesNew properties){
+NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
@@ -15,7 +15,7 @@ Node createNodeObject(String nodeId, PropertiesNew properties){
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
 	def homeDir = nodeProperties.get('HOME_DIR')
-	node = this.call(user, hostname, base_dir, jpNode)
+	node = this.call(user, hostname, homeDir, jpNode)
 	if (nodeProperties.get('RELEASE_BASE_DIR')) {
 		node.releaseBaseDir = nodeProperties.get('RELEASE_BASE_DIR')
 	}
