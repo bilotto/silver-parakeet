@@ -5,6 +5,7 @@ class Node {
 	String hostname
 	String homeDir
 	Node jumpServer
+	String releaseBaseDir
 	Node(user, hostname, homeDir, jumpServer) {
 		this.user = user
 		this.hostname = hostname
@@ -13,7 +14,7 @@ class Node {
 	}
 }
 
-private void executeCommand(String command, Boolean returnOutput){
+private def executeCommand(String command, Boolean returnOutput){
 	if (!this.jumpServer) {
 		tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 	} else {
@@ -34,6 +35,7 @@ void executeAndGetOutput(String command) {
 
 
 //todo: it needs the new definitions of the File class
+//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 Boolean copyFileToDir(File file, String destinationDir) {
 	if (!destinationDir) {
 		destinationDir = this.homeDir
