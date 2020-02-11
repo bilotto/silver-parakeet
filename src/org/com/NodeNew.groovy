@@ -13,7 +13,7 @@ class NodeNew {
 		this.jumpServer = jumpServer
 	}
 	
-	private def executeCommand(String command, Boolean returnOutput){
+	def executeCommand(String command, Boolean returnOutput){
 		if (!this.jumpServer) {
 			tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 		} else {
