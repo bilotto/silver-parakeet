@@ -1,12 +1,12 @@
 package org.com
 
-class Node {
+class NodeNew {
 	String user
 	String hostname
 	String homeDir
 	Node jumpServer
 	String releaseBaseDir
-	Node(user, hostname, homeDir, jumpServer) {
+	NodeNew(user, hostname, homeDir, jumpServer) {
 		this.user = user
 		this.hostname = hostname
 		this.homeDir = homeDir
