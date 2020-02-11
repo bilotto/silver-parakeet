@@ -9,15 +9,15 @@ Node createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
-		jpId = node_properties.get('JUMP_SERVER')
+		jpId = nodeProperties.get('JUMP_SERVER')
 		jpNode = this.createNodeObject(jpId, properties)
 	}
-	def user = node_properties.get('USER')
-	def hostname = node_properties.get('HOSTNAME')
-	def homeDir = node_properties.get('HOME_DIR')
+	def user = nodeProperties.get('USER')
+	def hostname = nodeProperties.get('HOSTNAME')
+	def homeDir = nodeProperties.get('HOME_DIR')
 	node = this.call(user, hostname, base_dir, jpNode)
-	if (node_properties.get('RELEASE_BASE_DIR')) {
-		node.releaseBaseDir = node_properties.get('RELEASE_BASE_DIR')
+	if (nodeProperties.get('RELEASE_BASE_DIR')) {
+		node.releaseBaseDir = nodeProperties.get('RELEASE_BASE_DIR')
 	}
 	return node
 }
