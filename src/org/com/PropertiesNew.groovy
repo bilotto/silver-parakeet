@@ -19,7 +19,6 @@ class PropertiesNew {
 		return this.GIT_PROPERTIES.get(projectName)                               
 	}
 	
-	
 	Map getNodeProperties(String nodeId) {
 		for (entry in this.NODES) {
 			for (node in entry.value) {
@@ -31,10 +30,11 @@ class PropertiesNew {
 		error "Node ${nodeId} not found"
 	}
 	
-	
 	List getNodeList(String nodeListId) {
 		for (entry in this.NODE_LIST) {
+			print entry
 			for (nodeList in entry.value) {
+				print nodeList
 				if (nodeListId == nodeList.key) {
 					return nodeList.value
 				}

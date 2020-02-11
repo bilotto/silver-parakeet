@@ -24,6 +24,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 
 Map createNodeObjectsFromList(nodeListId, properties){
 	nodeIdList = properties.getNodeList(nodeListId)
+	println nodeIdList
 	nodeObjects = [ : ]
 	nodeIdList.each { nodeId ->
 		nodeObjects.put(nodeId, this.createNodeObject(nodeId, properties))
