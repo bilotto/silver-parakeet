@@ -21,7 +21,7 @@ List listPropertiesFiles(propertiesFilesPath) {
 	properties_files.tokenize("\n").each { fileRelativePath ->
 		//remove ./ from the bash's output
 		fileRelativePath = fileRelativePath.drop("./".length())
-		list.put(fileRelativePath)
+		list.add(fileRelativePath)
 	}
 	return list
 }
