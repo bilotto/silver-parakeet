@@ -4,7 +4,7 @@ class NodeNew {
 	String user
 	String hostname
 	String homeDir
-	Node jumpServer
+	NodeNew jumpServer
 	String releaseBaseDir
 	NodeNew(user, hostname, homeDir, jumpServer) {
 		this.user = user
