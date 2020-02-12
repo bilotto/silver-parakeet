@@ -14,13 +14,13 @@ class ReleaseNew {
 	}
 	
 	void createTag(){
-		cmd = "cd ${gitNode.gitPath}; git fetch --tags"
+		def cmd = "cd ${gitNode.gitPath}; git fetch --tags"
 		gitNode.execute(cmd)
-		cmd = "cd ${gitNode.gitPath}; git tag -f ${this.gitTag}"
+		def cmd = "cd ${gitNode.gitPath}; git tag -f ${this.gitTag}"
 		gitNode.execute(cmd)
 		//todo: the push command might fail if the tag already exists
 		try {
-			cmd = "cd ${gitNode.gitPath}; git push origin ${this.gitTag}"
+			def cmd = "cd ${gitNode.gitPath}; git push origin ${this.gitTag}"
 			gitNode.execute(cmd)
 		} catch(Exception ex) {
 			println("Catching the exception");
@@ -38,7 +38,7 @@ class ReleaseNew {
 	}
 	
 	void cleanOldBuilds(){
-		command = """
+		def command = """
 			cd ${gitNode.releaseBaseDir}
 			if [ -e ${this.filename} ]; then rm ${this.filename}; fi
 			if [ -e ${this.name} ]; then rm -r ${this.name}; fi
@@ -47,7 +47,7 @@ class ReleaseNew {
 	}
 	
 	void makeReleaseFolder(){
-		command = """
+		def command = """
 			cd ${gitNode.releaseBaseDir}
 			mkdir ${this.name}
 			"""
@@ -56,7 +56,7 @@ class ReleaseNew {
 	
 	
 	void setPermissions() {
-		command = """
+		def command = """
 			cd ${gitNode.releaseBaseDir}/${this.name}
 			find . -name \"*.sh\" | xargs chmod -R 740
 			find . -name \"*.py\" | xargs chmod -R 740
@@ -66,7 +66,7 @@ class ReleaseNew {
 	}
 	
 	void compressBuild(){
-		command = """
+		def command = """
 			cd ${gitNode.releaseBaseDir}
 			tar -cf ${this.name}.tar ${this.name}
 			gzip -f ${this.name}.tar
