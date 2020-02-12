@@ -142,6 +142,12 @@ def executeLocalCommand(command, returnOutput){
   	}
 }
 
+def executeInParallel(branches) {
+	println branches
+	parallel branches
+}
+
+
 
 
 return this

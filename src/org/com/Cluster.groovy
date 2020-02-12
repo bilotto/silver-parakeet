@@ -3,9 +3,10 @@ package org.com
 class Cluster {
 	String name
 	List nodeList
-	Cluster(name, nodeList) {
+	Cluster(name, nodeList, tools) {
 		this.name = name
 		this.nodeList = nodeList
+		this.tools = tools
 	}
 	
 	void execute(String command){
@@ -13,7 +14,8 @@ class Cluster {
 		this.nodeList.each { node ->
 			branches[ node.hostname ] = { node.execute(command) }
 		}
-		parallel branches 
+		tools.executeInParallel(branches)
+		//parallel branches 
 	}
 	
 }
