@@ -5,12 +5,14 @@ class NodeNew {
 	String hostname
 	String homeDir
 	NodeNew jumpServer
+	def tools
 	String releaseBaseDir
-	NodeNew(user, hostname, homeDir, jumpServer) {
+	NodeNew(user, hostname, homeDir, jumpServer, tools) {
 		this.user = user
 		this.hostname = hostname
 		this.homeDir = homeDir
 		this.jumpServer = jumpServer
+		this.tools = tools
 	}
 	
 	def executeCommand(String command, Boolean returnOutput){
