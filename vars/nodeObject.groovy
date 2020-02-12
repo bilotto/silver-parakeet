@@ -7,7 +7,7 @@ def call(String user, String hostname, String homeDir, NodeNew jpNode){
 
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
-	nodeProperties = properties.getNodeProperties(nodeId)
+	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
 		jpNode = this.createNodeObject(jpId, properties)
