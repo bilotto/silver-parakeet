@@ -3,6 +3,7 @@ package org.com
 class Cluster {
 	String name
 	List nodeList
+	def tools
 	Cluster(name, nodeList, tools) {
 		this.name = name
 		this.nodeList = nodeList
