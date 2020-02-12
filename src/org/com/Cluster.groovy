@@ -9,12 +9,11 @@ class Cluster {
 	}
 	
 	void execute(String command){
-		script {
-			this.nodeList.each { node ->
-				branches[ node.hostname ] = { node.execute(command) }
-			}
-			parallel branches 
+		branches = [ : ]
+		this.nodeList.each { node ->
+			branches[ node.hostname ] = { node.execute(command) }
 		}
+		parallel branches 
 	}
 	
 }
