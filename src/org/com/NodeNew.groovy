@@ -1,19 +1,21 @@
 package org.com
 
-class Node {
+class NodeNew {
 	String user
 	String hostname
 	String homeDir
-	Node jumpServer
+	NodeNew jumpServer
+	def tools
 	String releaseBaseDir
-	Node(user, hostname, homeDir, jumpServer) {
+	NodeNew(user, hostname, homeDir, jumpServer, tools) {
 		this.user = user
 		this.hostname = hostname
 		this.homeDir = homeDir
 		this.jumpServer = jumpServer
+		this.tools = tools
 	}
 	
-	private def executeCommand(String command, Boolean returnOutput){
+	def executeCommand(String command, Boolean returnOutput){
 		if (!this.jumpServer) {
 			tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 		} else {
@@ -23,12 +25,12 @@ class Node {
 	}
 	
 	void execute(String command) {
-		returnOutput = false
+		def returnOutput = false
 		this.executeCommand(command, returnOutput)
 	}
 	
 	void executeAndGetOutput(String command) {
-		returnOutput = true
+		def returnOutput = true
 		return this.executeCommand(command, returnOutput)
 	}
 	

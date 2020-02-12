@@ -1,6 +1,7 @@
 import org.com.File
 import org.com.FileNew
 import org.com.Node
+import org.com.NodeNew
 
 def call(String name, Node node, String directory) {
 	file = new File()
@@ -8,7 +9,7 @@ def call(String name, Node node, String directory) {
 	return file
 }
 
-def call(String name, String directory, Node node) {
+def call(String name, String directory, NodeNew node) {
 	return new FileNew(name, directory, node)
 }
 

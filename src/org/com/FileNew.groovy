@@ -3,9 +3,8 @@ package org.com
 class FileNew {
 	String name
 	String directory
-	Node node
+	NodeNew node
 	String fullPath
-
 	FileNew(name, directory, node) {
 		this.name = name
 		this.node = node
