@@ -10,7 +10,11 @@ def call(String name, Node node, String directory) {
 }
 
 def call(String name, String directory, NodeNew node) {
-	return new FileNew(name, directory, node)
+	FileNew file = new FileNew(name, directory, node)
+	def cksumCommand = "cd ${file.directory}; cksum ${file.name}"
+	file.cksum = node.executeAndGetOutput(cksumCommand)
+	println file.cksum
+	return file
 }
 
 

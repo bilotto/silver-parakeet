@@ -29,9 +29,10 @@ class NodeNew {
 		this.executeCommand(command, returnOutput)
 	}
 	
-	void executeAndGetOutput(String command) {
+	String executeAndGetOutput(String command) {
 		def returnOutput = true
-		return this.executeCommand(command, returnOutput)
+		def output = this.executeCommand(command, returnOutput)
+		return output
 	}
 	
 	

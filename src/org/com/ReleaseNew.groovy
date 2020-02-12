@@ -11,6 +11,7 @@ class ReleaseNew {
 		this.gitBranch = gitBranch
 		this.gitTag = gitTag
 		this.gitNode = gitNode
+		this.filename = name + ".tar.gz"
 	}
 	
 	void createTag(){
@@ -73,7 +74,6 @@ class ReleaseNew {
 			rm -r ${this.name}
 			"""
 		this.gitNode.execute(command)
-		this.filename = name + ".tar.gz"
 	}
 	
 	void copyFolder(){
