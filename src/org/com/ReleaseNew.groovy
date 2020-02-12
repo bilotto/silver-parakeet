@@ -84,7 +84,7 @@ class ReleaseNew {
 		this.gitNode.execute(command)
 	}
 	
-	FileNew createRelease() {
+	void createRelease() {
 	//replace this method in a superclass if you need
 		this.pullBranch()
 		this.cleanOldBuilds()
@@ -95,7 +95,6 @@ class ReleaseNew {
 		if (this.gitTag != '') {
 			this.createTag()
 		}
-		return fileObject(this.name, gitNode.releaseBaseDir, this.gitNode)
 	}
 
 	
