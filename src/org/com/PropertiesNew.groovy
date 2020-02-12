@@ -12,7 +12,7 @@ class PropertiesNew {
 		this.GIT_PROPERTIES = propertiesMap.GIT_PROPERTIES
 	}
 	
-	Map getGitProperties(String projectName) {
+	Map getGitProjectProperties(String projectName) {
 		if (!this.GIT_PROPERTIES.get(projectName)) {
 			error "Git project properties not found"
 		}

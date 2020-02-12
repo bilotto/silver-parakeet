@@ -4,7 +4,7 @@ class ReleaseNew {
 	String name
 	String gitBranch
 	String gitTag
-	Node gitNode
+	GitNode gitNode
 	String filename
 	ReleaseNew(name, gitBranch, gitTag, gitNode) {
 		this.name = name
