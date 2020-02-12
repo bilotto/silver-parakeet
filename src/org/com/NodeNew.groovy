@@ -54,7 +54,7 @@ class NodeNew {
 			}
 		} else {
 			//it copies the file to the jump server, and then it copies to the node
-			this.jumpServer.copyFileToDir(file, jumpServer.home_dir)
+			this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
 			newFile = fileObject(file.name, this.jumpServer.homeDir, this.jumpServer)
 			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, newFile.fullPath, this.user, this.hostname, destinationDir)
 		}
