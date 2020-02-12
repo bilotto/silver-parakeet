@@ -16,11 +16,11 @@ class ReleaseNew {
 	void createTag(){
 		def cmd = "cd ${gitNode.gitPath}; git fetch --tags"
 		gitNode.execute(cmd)
-		def cmd = "cd ${gitNode.gitPath}; git tag -f ${this.gitTag}"
+		cmd = "cd ${gitNode.gitPath}; git tag -f ${this.gitTag}"
 		gitNode.execute(cmd)
 		//todo: the push command might fail if the tag already exists
 		try {
-			def cmd = "cd ${gitNode.gitPath}; git push origin ${this.gitTag}"
+			cmd = "cd ${gitNode.gitPath}; git push origin ${this.gitTag}"
 			gitNode.execute(cmd)
 		} catch(Exception ex) {
 			println("Catching the exception");
@@ -74,6 +74,28 @@ class ReleaseNew {
 			"""
 		this.gitNode.execute(command)
 		this.filename = name + ".tar.gz"
+	}
+	
+	void copyFolder(){
+		def command = """
+			cd ${gitNode.gitPath}/${this.name}
+			cp -r ${gitNode.gitPath}/* .
+			"""
+		this.gitNode.execute_command(command)
+	}
+	
+	FileNew createRelease() {
+	//replace this method in a superclass if you need
+		this.pullBranch()
+		this.cleanOldBuilds()
+		this.makeReleaseFolder()
+		this.copyFolder()
+		this.setPermissions()
+		this.compressBuild()
+		if (this.gitTag != '') {
+			this.createTag()
+		}
+		return fileObject(this.name, gitNode.releaseBaseDir, this.gitNode)
 	}
 
 	
