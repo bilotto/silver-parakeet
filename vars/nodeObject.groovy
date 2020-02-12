@@ -10,7 +10,15 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
-		jpNode = this.createNodeObject(jpId, properties)
+		if (env.jpObjects) {
+			if (!env.jpObjects.jpId) {
+				jpNode = this.createNodeObject(jpId, properties)
+				env.jpObjects.put(jpId, jpNode)
+			}
+			jpNode = env.jpObjects.jpId
+		} else {
+			jpNode = this.createNodeObject(jpId, properties)
+		}
 	}
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
