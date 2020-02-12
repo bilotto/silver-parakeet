@@ -11,8 +11,6 @@ class FileNew {
 		this.node = node
 		this.directory = directory 
 		this.fullPath = "${this.directory}/${this.name}"
-		def cksumCommand = "cd ${this.directory}; cksum ${this.name}"
-		this.cksum = node.executeAndGetOutput(cksumCommand)
 	}
 }
 
