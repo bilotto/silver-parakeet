@@ -1,7 +1,7 @@
 import org.com.NodeNew
 import org.com.PropertiesNew
 
-def call(String user, String hostname, String homeDir, NodeNew jpNode){
+NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 	return new NodeNew(user, hostname, homeDir, jpNode, tools)
 }
 
