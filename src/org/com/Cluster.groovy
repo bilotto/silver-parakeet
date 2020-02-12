@@ -14,7 +14,7 @@ class Cluster {
 		this.nodeList.each { node ->
 			branches[ node.hostname ] = { node.execute(command) }
 		}
-		tools.executeInParallel(branches)
+		this.tools.executeInParallel(branches)
 		//parallel branches 
 	}
 	
