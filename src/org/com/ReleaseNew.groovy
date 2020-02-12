@@ -81,7 +81,7 @@ class ReleaseNew {
 			cd ${gitNode.gitPath}/${this.name}
 			cp -r ${gitNode.gitPath}/* .
 			"""
-		this.gitNode.execute_command(command)
+		this.gitNode.execute(command)
 	}
 	
 	FileNew createRelease() {
