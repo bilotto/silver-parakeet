@@ -29,7 +29,7 @@ class ReleaseNew {
 	
 	
 	void pullBranch(){
-		command = """
+		def command = """
 			cd ${gitNode.gitPath}
 			git checkout ${this.gitBranch}
 			git pull
