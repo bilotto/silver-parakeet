@@ -26,6 +26,22 @@ def execute_remote_command(remote_user, remote_hostname, remote_command, return_
   	}
 }
 
+def executeRemoteCommand(String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
+	remoteCommand = this.make_command(remoteCommand)
+	def cmd = """
+				ssh ${remoteUser}@${remoteHostname} \
+				\"
+					${remoteCommand}
+				\"
+			"""
+	if (returnOutput) {
+	       stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+	       return stdout
+	} else {
+	      sh "${cmd}"
+  	}
+}
+
 def execute_remote_command_through_jump_server(jump_server_user, jump_server_hostname, remote_user, remote_hostname, remote_command, return_output) {
 	remote_command = this.make_command(remote_command)
 	def cmd = """
@@ -40,6 +56,25 @@ def execute_remote_command_through_jump_server(jump_server_user, jump_server_hos
 	if (return_output) {
 	       stdout = sh (returnStdout: true, script: "${cmd}").trim()
 	       return stdout.toString()
+	} else {
+	      sh "${cmd}"
+  	}
+}
+
+def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
+	remoteCommand = this.make_command(remoteCommand)
+	def cmd = """
+				ssh ${jumpServerUser}@${jumpServerHostname} \
+				\"
+					ssh ${remoteUser}@${remoteHostname} \
+					\\\"
+						${remoteCommand}
+					\\\"
+				\"
+			"""
+	if (returnOutput) {
+	       stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+	       return stdout
 	} else {
 	      sh "${cmd}"
   	}
@@ -72,6 +107,15 @@ def copy_file_to_node(src_user, src_hostname, file_path, dest_user, dest_hostnam
 	this.execute_remote_command(src_user, src_hostname, cmd, return_output)
 }
 
+def transferFileBetweenHosts(String sourceUser, String sourceHostname, String fileFullPath, String destinationUser, String destinationHostname, String destinationDir) {
+	def cmd = """
+				scp ${fileFullPath} ${destinationUser}@${destinationHostname}:${destinationDir}
+			"""
+	returnOutput = false
+	this.executeRemoteCommand(sourceUser, sourceHostname, cmd, return_output)
+}
+
+
 def copy_file_from_node(src_user, src_hostname, file_path, dest_user, dest_hostname, destination_dir) {
 	def cmd = """
 				scp ${src_user}@${src_hostname}:${file_path} ${destination_dir}
@@ -87,6 +131,23 @@ def copy_file_to_node_bkp(file_path, remote_user, remote_hostname, destination_d
 	sh (returnStdout: true, script: "${cmd}").trim()
 
 }
+
+def executeLocalCommand(command, returnOutput){
+	cmd = this.make_command(command)
+	if (returnOutput) {
+	       stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+	       return stdout
+	} else {
+	      sh "${cmd}"
+  	}
+}
+
+def executeInParallel(branches) {
+	println branches
+	parallel branches
+}
+
+
 
 
 return this

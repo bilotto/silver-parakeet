@@ -1,30 +1,66 @@
 package org.com
 
-
-def print_object(){
-	println clusterEnv
-}
-
-def construct(List node_list, String role){
-	clusterEnv = [
-			'node_list': node_list,
-			'role': role
-	]
-	this.print_object()
-}
-
-def execute(String command){
-	if (clusterEnv.role == "PASSIVE") {
-		branches = [ : ]
-		clusterEnv.node_list.each { node ->
-			branches[ node ] = { node.execute_command(command) }
-		}
-		parallel branches
-	} else {
-		clusterEnv.node_list.each { node ->
-			node.execute_command(command)
-		}		
+class Cluster {
+	String name
+	List nodeList
+	def tools
+	Cluster(name, nodeList, tools) {
+		this.name = name
+		this.nodeList = nodeList
+		this.tools = tools
 	}
+	
+	void execute(String command){
+		def branches = [ : ]
+		this.nodeList.each { node ->
+			branches[ node.hostname ] = { node.execute(command) }
+		}
+		this.tools.executeInParallel(branches)
+		//parallel branches
+	}
+	
+	void copyFile(FileNew file, String destinationDir) {
+	
+		def branches = [ : ]
+	
+		if (!env.jpObjects) {
+			jpObjectsList = [  ]
+			this.nodeList.each { node ->
+				if (!node.jumpServer) {
+					continue
+				}
+				if (!jpObjectsList.size()) {
+					jpObjectsList.add(node.jumpServer)
+				}
+				jpObjectsList.each { jumpServer ->
+					if (node.jumpServer != jumpServer) {
+						if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
+							jpObjectsList.add(node.jumpServer)
+						}
+					}
+				}
+			}			
+		} else {
+			jpObjectsList = env.jpObjects
+		}
+		
+		if (jpObjectsList.size()) {
+			jpObjectsList.each { node ->
+				branches[ node.hostname ] = { node.copyFile(file, null) }
+			}
+			this.tools.executeInParallel(branches)
+		}
+		
+		branches = [ : ]
+		this.nodeList.each { node ->
+			branches[ node.hostname ] = { node.copyFile(file, node.homeDir) }
+		}
+		this.tools.executeInParallel(branches)
+		
+		               
+	}
+
+	
 }
 
 
