@@ -43,5 +43,14 @@ Map createNodeObjectsFromList(nodeListId, properties){
 	return nodeObjects
 }
 
+Boolean isTheSameNode(NodeNew node1, NodeNew node2) {
+	if (node1 != node2) {
+		if ( node1.user != node2.user || node1.hostname != node2.hostname ) {
+			return false
+		}
+	}
+	return true
+}
+
 
 return this
