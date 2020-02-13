@@ -41,6 +41,9 @@ class NodeNew {
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
+		if (!this.directoryExists(destinationDir)) {
+			error "Directory ${destinationDir} does not exists in node"
+		}
 		if (!this.jumpServer) {
 			if (!file.node.jumpServer) {
 				this.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
@@ -78,6 +81,16 @@ class NodeNew {
 		this.copyFileToDir(releaseFile, this.releaseBaseDir)
 		return true
 	}
+	
+	Boolean directoryExists(){
+		def command = "if [ -e ${directory} ]; then echo true; else echo false; fi"
+    	def stdout = this.executeAndGetOutput(command)
+    	if (stdout == 'true') {
+    		return true
+    	}
+    	return false 
+	}
+
 
 }
 
