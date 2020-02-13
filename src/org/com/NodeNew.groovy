@@ -38,6 +38,7 @@ class NodeNew {
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
+		this.tools.log "Copying file ${file.fullPath} to node ${node.hostname}"
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
@@ -58,8 +59,9 @@ class NodeNew {
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
+			this.tools.log "The node ${node.hostname} has a jump server"
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			println "Checking if the file already exists in the jump server"
+			this.tools.log "Checking if the file already exists in the jump server"
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
