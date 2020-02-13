@@ -23,7 +23,7 @@ class Cluster {
 	
 		def branches = [ : ]
 	
-		jpObjectsList = [  ]
+		def jpObjectsList = [  ]
 		this.nodeList.each { node ->
 			if (!node.jumpServer) {
 				continue
@@ -32,6 +32,7 @@ class Cluster {
 				jpObjectsList.add(node.jumpServer)
 			}
 			jpObjectsList.each { jumpServer ->
+				
 				if (node.jumpServer != jumpServer) {
 					if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
 						jpObjectsList.add(node.jumpServer)
