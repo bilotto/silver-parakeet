@@ -23,26 +23,22 @@ class Cluster {
 	
 		def branches = [ : ]
 	
-		if (!env.jpObjects) {
-			jpObjectsList = [  ]
-			this.nodeList.each { node ->
-				if (!node.jumpServer) {
-					continue
-				}
-				if (!jpObjectsList.size()) {
-					jpObjectsList.add(node.jumpServer)
-				}
-				jpObjectsList.each { jumpServer ->
-					if (node.jumpServer != jumpServer) {
-						if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
-							jpObjectsList.add(node.jumpServer)
-						}
+		jpObjectsList = [  ]
+		this.nodeList.each { node ->
+			if (!node.jumpServer) {
+				continue
+			}
+			if (!jpObjectsList.size()) {
+				jpObjectsList.add(node.jumpServer)
+			}
+			jpObjectsList.each { jumpServer ->
+				if (node.jumpServer != jumpServer) {
+					if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
+						jpObjectsList.add(node.jumpServer)
 					}
 				}
-			}			
-		} else {
-			jpObjectsList = env.jpObjects
-		}
+			}
+		}			
 		
 		if (jpObjectsList.size()) {
 			jpObjectsList.each { node ->
