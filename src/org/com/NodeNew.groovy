@@ -65,10 +65,9 @@ class NodeNew {
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
-			file.replaceNode(this.jumpServer, this.jumpServer.homeDir)
 			this.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
-			//clean the file in the jump server
-			file.deleteItself()
+			//clean the file in the jump server if you want
+			//file.deleteItself()
 		}
 		return true
 	}
