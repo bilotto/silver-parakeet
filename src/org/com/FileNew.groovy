@@ -21,7 +21,7 @@ class FileNew {
 			return false
 		}
 		println "File exists. Is the same file?"
-		def cksumCommand = "cd ${directory}; cksum ${file.name}"
+		def cksumCommand = "cd ${directory}; cksum ${this.name}"
 		def cksum = node.executeAndGetOutput(cksumCommand)
 		if (cksum == this.cksum) {
 			println "They are the same file"
