@@ -42,7 +42,7 @@ class Cluster {
 		
 		if (jpObjectsList.size()) {
 			jpObjectsList.each { node ->
-				branches[ node.hostname ] = { node.copyFile(file, null) }
+				branches[ node.hostname ] = { node.copyFile(file, node.homeDir) }
 			}
 			this.tools.executeInParallel(branches)
 		}
