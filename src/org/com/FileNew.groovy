@@ -17,6 +17,7 @@ class FileNew {
 		def command = "cd ${directory}; if [ -e ${this.name} ]; then echo true; else echo false; fi"
 	    def stdout = node.executeAndGetOutput(command)
 		if (stdout != 'true'){
+			println "It does not exist"
 			return false
 		}
 		println "File exists. Is the same file?"

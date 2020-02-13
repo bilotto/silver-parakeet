@@ -59,6 +59,7 @@ class NodeNew {
 			}
 		} else {
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
+			println "Checking if the file already exists in the jump server"
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
@@ -82,8 +83,7 @@ class NodeNew {
 		return true
 	}
 	
-	Boolean directoryExists(directory) {
-		println directory.getClass()
+	Boolean directoryExists(String directory) {
 		def command = "if [ -e ${directory} ]; then echo true; else echo false; fi"
     	def stdout = this.executeAndGetOutput(command)
     	if (stdout == 'true') {
