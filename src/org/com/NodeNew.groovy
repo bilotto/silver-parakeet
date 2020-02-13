@@ -66,6 +66,18 @@ class NodeNew {
 		}
 		return true
 	}
+	
+	Boolean copyRelease(ReleaseNew release, FileNew releaseFile) {
+		if (!this.releaseBaseDir) {
+			error "releaseBaseDir" not set in node object
+		}
+		def command = "cd ${this.releaseBaseDir}; if [ -e ${release.filename} ]; then rm -f ${release.filename}; fi"
+		this.execute(command)
+		command = "cd ${this.releaseBaseDir}; if [ -e ${release.name} ]; then rm -rf ${release.name}; fi"
+		this.execute(command)
+		this.copyFileToDir(releaseFile, this.releaseBaseDir)
+		return true
+	}
 
 }
 
