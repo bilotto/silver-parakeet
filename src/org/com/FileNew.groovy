@@ -30,6 +30,16 @@ class FileNew {
 		return false
 	}
 	
-
+	void replaceNode(node, directory) {
+		this.node = node
+		this.directory = directory
+		this.fullPath = "${this.directory}/${this.name}"
+	}
+	
+	void deleteItself(){
+		def command = "rm -f ${this.fullPath}"
+		this.node.execute(command)  
+	}
+	
 }
 
