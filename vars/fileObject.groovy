@@ -2,6 +2,7 @@ import org.com.File
 import org.com.FileNew
 import org.com.Node
 import org.com.NodeNew
+import org.com.GitNode
 
 def call(String name, Node node, String directory) {
 	file = new File()
