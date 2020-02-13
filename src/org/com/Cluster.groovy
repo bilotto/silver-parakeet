@@ -1,5 +1,7 @@
 package org.com
 
+import org.com.FileNew
+
 class Cluster {
 	String name
 	List nodeList
