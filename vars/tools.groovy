@@ -155,7 +155,7 @@ def executeInParallel(branches) {
 	parallel branches
 }
 
-def error(errorMessage){
+def raiseError(errorMessage){
 	error errorMessage
 }
 
