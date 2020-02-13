@@ -17,6 +17,15 @@ def call(String name, String directory, NodeNew node) {
 	return file
 }
 
+def call(String name, String directory, GitNode gitNode) {
+	node = nodeObject(gitNode.user, gitNode.hostname, gitNode.homeDir, gitNode.jumpServer)
+	FileNew file = new FileNew(name, directory, node)
+	def cksumCommand = "cd ${file.directory}; cksum ${file.name}"
+	file.cksum = node.executeAndGetOutput(cksumCommand)
+	println file.cksum
+	return file
+}
+
 
 def dump_map_to_file(map, filename){
 	content = ''
