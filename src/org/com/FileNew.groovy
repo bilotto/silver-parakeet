@@ -14,14 +14,14 @@ class FileNew {
 	}
 	
 	Boolean existsinNode(NodeNew node, String directory){
-		command = "cd ${directory}; if [ -e ${this.name} ]; then echo true; else echo false; fi"
-	    stdout = node.executeAndGetOutput(command)
+		def command = "cd ${directory}; if [ -e ${this.name} ]; then echo true; else echo false; fi"
+	    def stdout = node.executeAndGetOutput(command)
 		if (stdout != 'true'){
 			return false
 		}
 		println "File exists. Is the same file?"
-		cksumCommand = "cd ${directory}; cksum ${file.name}"
-		cksum = node.executeAndGetOutput(cksumCommand)
+		def cksumCommand = "cd ${directory}; cksum ${file.name}"
+		def cksum = node.executeAndGetOutput(cksumCommand)
 		if (cksum == this.cksum) {
 			println "They are the same file"
 			return true
