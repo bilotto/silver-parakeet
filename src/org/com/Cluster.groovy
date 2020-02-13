@@ -22,8 +22,10 @@ class Cluster {
 	}
 	
 	void copyFile(FileNew file, String destinationDir) {
+		println file
+		println file.getClass()
+		
 		def branches = [ : ]
-	
 		def jpObjectsList = [  ]
 		this.nodeList.each { node ->
 			println node.hostname
@@ -49,7 +51,10 @@ class Cluster {
 		
 		if (jpObjectsList.size()) {
 			jpObjectsList.each { node ->
-				branches[ node.hostname ] = { node.copyFile(file, node.homeDir) }
+				branches[ node.hostname ] = { 
+					//node.copyFile(file, node.homeDir)
+					node.execute("date")
+					}
 			}
 			this.tools.executeInParallel(branches)
 		}
