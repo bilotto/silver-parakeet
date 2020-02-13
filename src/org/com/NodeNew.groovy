@@ -56,11 +56,13 @@ class NodeNew {
 			}
 		} else {
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			if (!file.existsinNode(jumpServer, jumpServer.homeDir)) {
+			if (!file.existsinNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
 			}
-			def newFile = fileObject(file.name, this.jumpServer.homeDir, this.jumpServer)
-			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, newFile.fullPath, this.user, this.hostname, destinationDir)
+			file.replaceNode(this.jumpServer, jumpServer.homeDir)
+			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+			//clean the file in the jump server
+			file.deleteItself()
 		}
 		return true
 	}
