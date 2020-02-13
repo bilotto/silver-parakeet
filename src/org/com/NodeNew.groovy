@@ -59,11 +59,11 @@ class NodeNew {
 			}
 		} else {
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			if (!file.existsinNode(this.jumpServer, this.jumpServer.homeDir)) {
-				this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
+			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
+				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
-			file.replaceNode(this.jumpServer, jumpServer.homeDir)
-			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+			file.replaceNode(this.jumpServer, this.jumpServer.homeDir)
+			this.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			//clean the file in the jump server
 			file.deleteItself()
 		}
