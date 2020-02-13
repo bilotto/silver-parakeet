@@ -42,7 +42,7 @@ class NodeNew {
 			destinationDir = this.homeDir
 		}
 		if (!this.directoryExists(destinationDir)) {
-			error "Directory ${destinationDir} does not exists in node"
+			this.tools.error "Directory ${destinationDir} does not exists in node"
 		}
 		if (!this.jumpServer) {
 			if (!file.node.jumpServer) {
@@ -72,7 +72,7 @@ class NodeNew {
 	
 	Boolean copyRelease(ReleaseNew release, FileNew releaseFile) {
 		if (!this.releaseBaseDir) {
-			error "releaseBaseDir not set in node object"
+			this.tools.error "releaseBaseDir not set in node object"
 		}
 		def command = "cd ${this.releaseBaseDir}; if [ -e ${release.filename} ]; then rm -f ${release.filename}; fi"
 		this.execute(command)

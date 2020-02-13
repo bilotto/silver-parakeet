@@ -115,6 +115,14 @@ def transferFileBetweenHosts(String sourceUser, String sourceHostname, String fi
 	this.executeRemoteCommand(sourceUser, sourceHostname, cmd, return_output)
 }
 
+def transferFileBetweenHostsWithJumpServer(String sourceUser, String sourceHostname, String fileFullPath, String destinationUser, String destinationHostname, String destinationDir) {
+	def cmd = """
+				scp ${fileFullPath} ${destinationUser}@${destinationHostname}:${destinationDir}
+			"""
+	returnOutput = false
+	this.executeRemoteCommandThroughJumpServer(sourceUser, sourceHostname, cmd, return_output)
+}
+
 
 def copy_file_from_node(src_user, src_hostname, file_path, dest_user, dest_hostname, destination_dir) {
 	def cmd = """
@@ -146,6 +154,11 @@ def executeInParallel(branches) {
 	println branches
 	parallel branches
 }
+
+def error(errorMessage){
+	error errorMessage
+}
+
 
 
 
