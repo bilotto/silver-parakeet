@@ -38,6 +38,7 @@ class NodeNew {
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
+		this.tools.log "Copying file ${file.fullPath} to node ${this.hostname}"
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
@@ -58,14 +59,15 @@ class NodeNew {
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
+			this.tools.log "The node ${this.hostname} has a jump server"
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			if (!file.existsinNode(this.jumpServer, this.jumpServer.homeDir)) {
-				this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
+			this.tools.log "Checking if the file already exists in the jump server"
+			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
+				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
-			file.replaceNode(this.jumpServer, jumpServer.homeDir)
-			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
-			//clean the file in the jump server
-			file.deleteItself()
+			this.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+			//clean the file in the jump server if you want
+			//file.deleteItself()
 		}
 		return true
 	}
@@ -82,8 +84,7 @@ class NodeNew {
 		return true
 	}
 	
-	Boolean directoryExists(directory) {
-		println directory.getClass()
+	Boolean directoryExists(String directory) {
 		def command = "if [ -e ${directory} ]; then echo true; else echo false; fi"
     	def stdout = this.executeAndGetOutput(command)
     	if (stdout == 'true') {

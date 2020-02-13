@@ -159,6 +159,11 @@ def raiseError(errorMessage){
 	error errorMessage
 }
 
+def log(message) {
+	println message
+}
+
+
 
 
 

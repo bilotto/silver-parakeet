@@ -1,5 +1,7 @@
 package org.com
 
+import org.com.FileNew
+
 class Cluster {
 	String name
 	List nodeList
@@ -20,40 +22,43 @@ class Cluster {
 	}
 	
 	void copyFile(FileNew file, String destinationDir) {
-	
 		def branches = [ : ]
-	
-		if (!env.jpObjects) {
-			jpObjectsList = [  ]
-			this.nodeList.each { node ->
-				if (!node.jumpServer) {
-					continue
-				}
-				if (!jpObjectsList.size()) {
-					jpObjectsList.add(node.jumpServer)
-				}
-				jpObjectsList.each { jumpServer ->
-					if (node.jumpServer != jumpServer) {
-						if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
-							jpObjectsList.add(node.jumpServer)
-						}
+		def jpObjectsList = [  ]
+		this.nodeList.each { node ->
+			println node.hostname
+			if (!node.jumpServer) {
+				continue
+			}
+			if (!jpObjectsList.size()) {
+				jpObjectsList.add(node.jumpServer)
+			}
+			jpObjectsList.each { jumpServer ->
+				
+				if (node.jumpServer != jumpServer) {
+					if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
+						jpObjectsList.add(node.jumpServer)
 					}
 				}
-			}			
-		} else {
-			jpObjectsList = env.jpObjects
+			}
 		}
+		
+		println jpObjectsList
+		println file
+		println file.getClass()
 		
 		if (jpObjectsList.size()) {
 			jpObjectsList.each { node ->
-				branches[ node.hostname ] = { node.copyFile(file, null) }
+				branches[ node.hostname ] = { node.copyFileToDir(file, node.homeDir) }
 			}
 			this.tools.executeInParallel(branches)
 		}
 		
 		branches = [ : ]
 		this.nodeList.each { node ->
-			branches[ node.hostname ] = { node.copyFile(file, node.homeDir) }
+			if (!destinationDir) {
+				destinationDir = node.homeDir
+			}
+			branches[ node.hostname ] = { node.copyFileToDir(file, destinationDir) }
 		}
 		this.tools.executeInParallel(branches)
 		
