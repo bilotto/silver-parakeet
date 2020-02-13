@@ -16,8 +16,50 @@ class Cluster {
 			branches[ node.hostname ] = { node.execute(command) }
 		}
 		this.tools.executeInParallel(branches)
-		//parallel branches 
+		//parallel branches
 	}
+	
+	void copyFile(FileNew file, String destinationDir) {
+	
+		def branches = [ : ]
+	
+		if (!env.jpObjects) {
+			jpObjectsList = [  ]
+			this.nodeList.each { node ->
+				if (!node.jumpServer) {
+					continue
+				}
+				if (!jpObjectsList.size()) {
+					jpObjectsList.add(node.jumpServer)
+				}
+				jpObjectsList.each { jumpServer ->
+					if (node.jumpServer != jumpServer) {
+						if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
+							jpObjectsList.add(node.jumpServer)
+						}
+					}
+				}
+			}			
+		} else {
+			jpObjectsList = env.jpObjects
+		}
+		
+		if (jpObjectsList.size()) {
+			jpObjectsList.each { node ->
+				branches[ node.hostname ] = { node.copyFile(file, null) }
+			}
+			this.tools.executeInParallel(branches)
+		}
+		
+		branches = [ : ]
+		this.nodeList.each { node ->
+			branches[ node.hostname ] = { node.copyFile(file, node.homeDir) }
+		}
+		this.tools.executeInParallel(branches)
+		
+		               
+	}
+
 	
 }
 

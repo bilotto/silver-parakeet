@@ -10,7 +10,15 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
-		jpNode = this.createNodeObject(jpId, properties)
+		if (env.jpObjects) {
+			if (!env.jpObjects.jpId) {
+				jpNode = this.createNodeObject(jpId, properties)
+				env.jpObjects.put(jpId, jpNode)
+			}
+			jpNode = env.jpObjects.jpId
+		} else {
+			jpNode = this.createNodeObject(jpId, properties)
+		}
 	}
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
@@ -33,6 +41,15 @@ Map createNodeObjectsFromList(nodeListId, properties){
 		nodeObjects.put(nodeId, node)
 	}
 	return nodeObjects
+}
+
+Boolean isTheSameNode(NodeNew node1, NodeNew node2) {
+	if (node1 != node2) {
+		if ( node1.user != node2.user || node1.hostname != node2.hostname ) {
+			return false
+		}
+	}
+	return true
 }
 
 
