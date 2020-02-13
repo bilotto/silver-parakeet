@@ -24,6 +24,7 @@ class Cluster {
 	
 		def jpObjectsList = [  ]
 		this.nodeList.each { node ->
+			println node.hostname
 			if (!node.jumpServer) {
 				continue
 			}
@@ -38,7 +39,11 @@ class Cluster {
 					}
 				}
 			}
-		}			
+		}
+		
+		println jpObjectsList
+		println file
+		println file.getClass()
 		
 		if (jpObjectsList.size()) {
 			jpObjectsList.each { node ->
