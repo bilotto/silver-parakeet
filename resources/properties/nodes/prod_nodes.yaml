@@ -1,0 +1,6 @@
+PROD_NODES:
+   crtsmapp01-oam:
+      USER: fworks
+      HOSTNAME: 172.18.115.110
+      BASE_DIR: /home/fworks/installers
+      JUMP_SERVER: respsrhl08
