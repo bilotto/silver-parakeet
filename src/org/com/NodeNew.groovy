@@ -41,7 +41,7 @@ class NodeNew {
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
-		if (!this.directoryExists(destinationDir)) {
+		if (!directoryExists(destinationDir)) {
 			error "Directory ${destinationDir} does not exists in node"
 		}
 		if (!this.jumpServer) {
