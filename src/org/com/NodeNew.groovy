@@ -36,9 +36,8 @@ class NodeNew {
 	}
 	
 	
-	//todo: it needs the new definitions of the File class
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
-	Boolean copyFileToDir(File file, String destinationDir) {
+	Boolean copyFileToDir(FileNew file, String destinationDir) {
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
@@ -46,18 +45,24 @@ class NodeNew {
 			if (!file.node.jumpServer) {
 				this.tools.copy_file_to_node(file.node.user, file.node.hostname, file.file_full_path, this.user, this.hostname, destinationDir)
 			} else {
-				//first, copy the file to the jump server from the jump server's side
-				def jumpServer = file.node.jumpServer
-				this.tools.copy_file_from_node(file.node.user, file.node.hostname, file.file_full_path, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
-				//now, copy the file from the jumpServer to the node
-				newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
-				this.copyFileToDir(newFile, destinationDir)
+				if (!nodeObject.isTheSameNode(this.jumpServer, file.node.jumpServer)) {
+					//first, copy the file to the jump server from the jump server's side
+					this.tools.copy_file_from_node(file.node.user, file.node.hostname, file.file_full_path, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
+					//now, copy the file from the jumpServer to the node
+					newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
+					this.copyFileToDir(newFile, destinationDir)
+				}
+				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
-			//it copies the file to the jump server, and then it copies to the node
-			this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
-			newFile = fileObject(file.name, this.jumpServer.homeDir, this.jumpServer)
-			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, newFile.fullPath, this.user, this.hostname, destinationDir)
+			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
+			if (!file.existsinNode(this.jumpServer, this.jumpServer.homeDir)) {
+				this.jumpServer.copyFileToDir(file, jumpServer.homeDir)
+			}
+			file.replaceNode(this.jumpServer, jumpServer.homeDir)
+			this.tools.transferFileBetweenHosts(jumpServer.user, jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+			//clean the file in the jump server
+			file.deleteItself()
 		}
 		return true
 	}
