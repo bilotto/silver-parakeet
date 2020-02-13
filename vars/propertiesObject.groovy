@@ -57,8 +57,9 @@ Map generatePropertiesMap(propertiesFiles) {
 			slashChar = fileRelativePath.indexOf("/")
 			lastItKey = key
 		}
-		log "Importing properties from file ${fileDir}/${fileName}"
+		
 		fileName = fileRelativePath
+		log "Importing properties from file ${fileDir}/${fileName}"
 		dotChar = fileName.indexOf(".")
 		key = fileName[ 0..(dotChar - 1) ].toUpperCase()
 		writeFile(file: "${fileName}", text: libraryResource("${fileDir}/${fileName}"), encoding: "UTF-8")
