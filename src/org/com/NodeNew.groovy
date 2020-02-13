@@ -41,7 +41,7 @@ class NodeNew {
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
-		if (!directoryExists(destinationDir)) {
+		if (!this.directoryExists(destinationDir)) {
 			error "Directory ${destinationDir} does not exists in node"
 		}
 		if (!this.jumpServer) {
@@ -82,7 +82,8 @@ class NodeNew {
 		return true
 	}
 	
-	Boolean directoryExists(String directory){
+	Boolean directoryExists(directory) {
+		println directory.getClass()
 		def command = "if [ -e ${directory} ]; then echo true; else echo false; fi"
     	def stdout = this.executeAndGetOutput(command)
     	if (stdout == 'true') {
