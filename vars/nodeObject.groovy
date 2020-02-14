@@ -10,12 +10,13 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
-		if (env.jpObjects) {
-			if (!env.jpObjects.jpId) {
+		log "DEBUG" "env.jumpServerObjects: ${env.jumpServerObjects}"
+		if (env.jumpServerObjects) {
+			if (!env.jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
-				env.jpObjects.put(jpId, jpNode)
+				env.jumpServerObjects.put(jpId, jpNode)
 			}
-			jpNode = env.jpObjects.jpId
+			jpNode = env.jumpServerObjects.jpId
 		} else {
 			jpNode = this.createNodeObject(jpId, properties)
 		}
@@ -31,9 +32,13 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 }
 
 Map createNodeObjectsFromList(nodeListId, properties){
+	def nodeObjects = [ : ]
 	nodeIdList = properties.getNodeList(nodeListId)
-	println nodeIdList
-	nodeObjects = [ : ]
+	if (!nodeIdList.size()){
+		log "${nodeListId} is probably a standalone node"
+		nodeId = nodeListId
+	    nodeIdList.add(nodeId)
+	}
 	nodeIdList.each { nodeId ->
 		println nodeId
 		node = this.createNodeObject(nodeId, properties)
