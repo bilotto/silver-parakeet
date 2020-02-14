@@ -11,16 +11,16 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
 		if (jumpServerObjects) {
-			log "DEBUG" "jumpServerObjects: ${jumpServerObjects}"
+			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
 				jumpServerObjects.put(jpId, jpNode)
 			}
-			jpNode = jumpServerObjects.jpId
 		} else {
 			jpNode = this.createNodeObject(jpId, properties)
 			jumpServerObjects.put(jpId, jpNode)
 		}
+		jpNode = jumpServerObjects.jpId
 	}
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
