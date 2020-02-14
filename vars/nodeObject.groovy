@@ -30,6 +30,8 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 		}
 		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		jpNode = jumpServerObjects.jpId
+		log("DEBUG", "jpId: ${jpId}")
+		log("DEBUG", "jpNode: ${jpNode}")
 	}
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
