@@ -13,6 +13,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 		def jpId = nodeProperties.get('JUMP_SERVER')
 		//todo: the variable below should be defined in the upper context
 		jumpServerObjects = defaultIfInexistent(jumpServerObjects, [ : ])
+		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		if (jumpServerObjects) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
@@ -73,6 +74,7 @@ def defaultIfInexistent(varNameExpr, defaultValue) {
     try {
         varNameExpr()
     } catch (exc) {
+    	log("DEBUG", "Returning default value ${defaultValue} to ${varNameExpr}")
         defaultValue
     }
 }
