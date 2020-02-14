@@ -3,9 +3,13 @@ def call(String logMessage){
 }
 
 def call(String logType, String logMessage){
-	if (env.LOG_LEVEL == logType){
+	if (!env.logType) {
+		return false
+	}
+	if (env.logType == 'true'){
 		println logMessage
 	}
+	return true
 }
 
 def raiseError(String logMessage){
