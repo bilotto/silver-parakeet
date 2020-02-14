@@ -13,7 +13,8 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 		def jpId = nodeProperties.get('JUMP_SERVER')
 		//todo: the variable jumpServerObjects below should be defined in the upper context
 	    try {
-	        jumpServerObjects()
+	    	var = {jumpServerObjects}
+	        var()
 	    } catch (exc) {
 	    	log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
 	    	def jumpServerObjects = [ : ]
