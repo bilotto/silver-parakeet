@@ -8,10 +8,11 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
+	log("DEBUG", "nodeProperties: ${nodeProperties}")
 	if (nodeProperties.get('JUMP_SERVER')) {
-		log("DEBUG", "nodeProperties: ${nodeProperties.get('JUMP_SERVER')}")
 		def jpId = nodeProperties.get('JUMP_SERVER')
-		if (jumpServerObjects) {
+		//todo: the variable below should be defined in the upper context
+		if (defaultIfInexistent(jumpServerObjects, [ : ])) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
@@ -65,6 +66,14 @@ Boolean isTheSameNode(NodeNew node1, NodeNew node2) {
 		}
 	}
 	return true
+}
+
+def defaultIfInexistent(varNameExpr, defaultValue) {
+    try {
+        varNameExpr()
+    } catch (exc) {
+        defaultValue
+    }
 }
 
 
