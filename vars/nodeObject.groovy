@@ -17,7 +17,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	        var()
 	    } catch (exc) {
 	    	log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
-	    	def jumpServerObjects = [ : ]
+	    	jumpServerObjects = [ : ]
 	    }
 		if (jumpServerObjects) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
