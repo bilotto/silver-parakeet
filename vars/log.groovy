@@ -3,7 +3,7 @@ def call(String logMessage){
 }
 
 def call(String logType, String logMessage){
-	if (env.LOG_TYPE == logType){
+	if (env.LOG_LEVEL == logType){
 		println logMessage
 	}
 }
