@@ -10,8 +10,8 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
-		log "DEBUG" "jumpServerObjects: ${jumpServerObjects}"
 		if (jumpServerObjects) {
+			log "DEBUG" "jumpServerObjects: ${jumpServerObjects}"
 			if (!jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
 				jumpServerObjects.put(jpId, jpNode)
