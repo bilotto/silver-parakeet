@@ -59,18 +59,16 @@ class Cluster {
 		def branches = [ : ]
 		if (this.jumpServerList.size()) {
 			this.jumpServerList.each { node ->
-				branches[ node.hostname ] = { node.copyRelease(release, releaseFile.homeDir) }
+				branches[ node.hostname ] = { node.copyFileToDir(releaseFile, node.homeDir) }
 			}
 			this.tools.executeInParallel(branches)
 		}
 		branches = [ : ]
 		this.nodeList.each { node ->
-			if (!destinationDir) {
-				destinationDir = node.homeDir
-			}
 			branches[ node.hostname ] = { node.copyRelease(release, releaseFile) }
 		}
 		this.tools.executeInParallel(branches)
+		//todo: clean jump server afterwards
 		return true 	
 	}
 }
