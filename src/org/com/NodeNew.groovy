@@ -49,10 +49,12 @@ class NodeNew {
 			if (!file.node.jumpServer) {
 				this.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			} else {
+			//todo: the code below is probably failing
 				if (!nodeObject.isTheSameNode(this.jumpServer, file.node.jumpServer)) {
 					//first, copy the file to the jump server from the jump server's side
 					this.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
 					//now, copy the file from the jumpServer to the node
+					file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
 					newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
 					this.copyFileToDir(newFile, destinationDir)
 				}
@@ -65,6 +67,7 @@ class NodeNew {
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
+			file.replaceNode(jumpServer, jumpServer.homeDir)
 			this.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			//clean the file in the jump server if you want
 			//file.deleteItself()
