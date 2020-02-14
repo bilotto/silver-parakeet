@@ -20,7 +20,6 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	    	jumpServerObjects = [ : ]
 	    }
 		if (jumpServerObjects) {
-			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
 				jumpServerObjects.put(jpId, jpNode)
@@ -29,6 +28,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			jpNode = this.createNodeObject(jpId, properties)
 			jumpServerObjects.put(jpId, jpNode)
 		}
+		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		jpNode = jumpServerObjects.jpId
 	}
 	def user = nodeProperties.get('USER')
