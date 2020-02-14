@@ -8,7 +8,7 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
-	log("DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
+	log("LOG_DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
 	if (nodeProperties.get('JUMP_SERVER')) {
 		jpId = nodeProperties.get('JUMP_SERVER')
 		//todo: the variable jumpServerObjects below should be defined in the upper context
@@ -16,7 +16,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	    	var = {jumpServerObjects}
 	        var()
 	    } catch (exc) {
-	    	log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
+	    	log("LOG_DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
 	    	jumpServerObjects = [ : ]
 	    }
 		if (jumpServerObjects) {
@@ -28,10 +28,10 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			jpNode = this.createNodeObject(jpId, properties)
 			jumpServerObjects.put(jpId, jpNode)
 		}
-		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
+		log("LOG_DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		jpNode = jumpServerObjects.get(jpId)
-		log("DEBUG", "jpId: ${jpId}")
-		log("DEBUG", "jpNode: ${jpNode}")
+		log("LOG_DEBUG", "jpId: ${jpId}")
+		log("LOG_DEBUG", "jpNode: ${jpNode}")
 	}
 	def user = nodeProperties.get('USER')
 	def hostname = nodeProperties.get('HOSTNAME')
@@ -74,7 +74,7 @@ def defaultIfInexistent(varNameExpr, defaultValue) {
     try {
         varNameExpr()
     } catch (exc) {
-    	log("DEBUG", "Returning default value ${defaultValue} to ${varNameExpr}")
+    	log("LOG_DEBUG", "Returning default value ${defaultValue} to ${varNameExpr}")
         defaultValue
     }
 }
