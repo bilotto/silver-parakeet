@@ -8,11 +8,12 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
-	log("DEBUG", "nodeProperties: ${nodeProperties}")
+	log("DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
 	if (nodeProperties.get('JUMP_SERVER')) {
 		def jpId = nodeProperties.get('JUMP_SERVER')
 		//todo: the variable below should be defined in the upper context
-		if (defaultIfInexistent(jumpServerObjects, [ : ])) {
+		jumpServerObjects = defaultIfInexistent(jumpServerObjects, [ : ])
+		if (jumpServerObjects) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
 				jpNode = this.createNodeObject(jpId, properties)
