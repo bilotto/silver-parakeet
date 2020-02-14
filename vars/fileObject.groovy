@@ -2,6 +2,7 @@ import org.com.File
 import org.com.FileNew
 import org.com.Node
 import org.com.NodeNew
+import org.com.GitNode
 
 def call(String name, Node node, String directory) {
 	file = new File()
@@ -13,8 +14,13 @@ def call(String name, String directory, NodeNew node) {
 	FileNew file = new FileNew(name, directory, node)
 	def cksumCommand = "cd ${file.directory}; cksum ${file.name}"
 	file.cksum = node.executeAndGetOutput(cksumCommand)
-	println file.cksum
+	log("LOG_DEBUG", "File cksum: ${file.cksum}")
 	return file
+}
+
+def call(String name, String directory, GitNode gitNode) {
+	node = nodeObject(gitNode.user, gitNode.hostname, gitNode.homeDir, gitNode.jumpServer)
+	return this.call(name, directory, node)
 }
 
 

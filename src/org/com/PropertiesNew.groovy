@@ -40,6 +40,6 @@ class PropertiesNew {
 				}
 			}
 		}
-		error "Node list ${nodeListId} not found"
+		return [  ]
 	}
 }
