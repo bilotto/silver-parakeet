@@ -11,9 +11,13 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	log("DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
 	if (nodeProperties.get('JUMP_SERVER')) {
 		def jpId = nodeProperties.get('JUMP_SERVER')
-		//todo: the variable below should be defined in the upper context
-		jumpServerObjects = this.defaultIfInexistent({jumpServerObjects}, [ : ])
-		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
+		//todo: the variable jumpServerObjects below should be defined in the upper context
+	    try {
+	        jumpServerObjects()
+	    } catch (exc) {
+	    	log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
+	    	def jumpServerObjects = [ : ]
+	    }
 		if (jumpServerObjects) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
@@ -22,13 +26,6 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			}
 		} else {
 			jpNode = this.createNodeObject(jpId, properties)
-			try {
-				jumpServerObjects.put(jpId, jpNode)
-			} catch(Exception ex) {
-				log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
-				def jumpServerObjects = [ : ]
-				jumpServerObjects.put(jpId, jpNode)
-			}
 			jumpServerObjects.put(jpId, jpNode)
 		}
 		jpNode = jumpServerObjects.jpId
