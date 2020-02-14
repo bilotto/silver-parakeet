@@ -18,6 +18,13 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			}
 		} else {
 			jpNode = this.createNodeObject(jpId, properties)
+			try {
+				jumpServerObjects.put(jpId, jpNode)
+			} catch(Exception ex) {
+				log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
+				def jumpServerObjects = [ : ]
+				jumpServerObjects.put(jpId, jpNode)
+			}
 			jumpServerObjects.put(jpId, jpNode)
 		}
 		jpNode = jumpServerObjects.jpId
