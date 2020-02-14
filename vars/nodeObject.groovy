@@ -9,7 +9,8 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	if (nodeProperties.get('JUMP_SERVER')) {
-		jpId = nodeProperties.get('JUMP_SERVER')
+		log("DEBUG", "nodeProperties: ${nodeProperties.get('JUMP_SERVER')}")
+		def jpId = nodeProperties.get('JUMP_SERVER')
 		if (jumpServerObjects) {
 			log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 			if (!jumpServerObjects.jpId) {
