@@ -1,15 +1,11 @@
 import org.com.Cluster
 
-def call(Map node_objects, String role){
-
-	if (role != 'ACTIVE' && role != 'PASSIVE') {
-		error "Invalid cluster role: ${role}"
+def call(String clusterName, Map nodeObjects){
+	nodeList = []
+	nodeObjects.each{ k, v -> nodeList.add(v) }
+	if (!nodeList.size()){
+	    error "empty node list"
 	}
-
-	node_list = []
-	node_objects.each{ k, v -> node_list.add(v) }
-
-	Cluster cluster = new Cluster()
-	cluster.construct(node_list, role)
-	return cluster
+	return new Cluster(clusterName, nodeList, tools)
 }
+

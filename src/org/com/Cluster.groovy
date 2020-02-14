@@ -1,15 +1,31 @@
 package org.com
 
-import org.com.FileNew
-
 class Cluster {
 	String name
 	List nodeList
+	List jumpServerList
 	def tools
 	Cluster(name, nodeList, tools) {
 		this.name = name
 		this.nodeList = nodeList
 		this.tools = tools
+		this.jumpServerList = [  ]
+	
+		for (node in this.nodeList) {
+			if (!node.jumpServer) {
+				continue
+			}
+			if (!this.jumpServerList.size()) {
+				this.jumpServerList.add(node.jumpServer)
+			}
+			this.jumpServerList.each { jumpServer ->
+				if (node.jumpServer != jumpServer) {
+					if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
+						this.jumpServerList.add(node.jumpServer)
+					}
+				}
+			}
+		}
 	}
 	
 	void execute(String command){
@@ -18,41 +34,16 @@ class Cluster {
 			branches[ node.hostname ] = { node.execute(command) }
 		}
 		this.tools.executeInParallel(branches)
-		//parallel branches
 	}
 	
-	void copyFile(FileNew file, String destinationDir) {
+	Boolean copyFileToDir(FileNew file, String destinationDir) {
 		def branches = [ : ]
-		def jpObjectsList = [  ]
-		this.nodeList.each { node ->
-			println node.hostname
-			if (!node.jumpServer) {
-				continue
-			}
-			if (!jpObjectsList.size()) {
-				jpObjectsList.add(node.jumpServer)
-			}
-			jpObjectsList.each { jumpServer ->
-				
-				if (node.jumpServer != jumpServer) {
-					if ( node.jumpServer.user != jumpServer.user || node.jumpServer.hostname != jumpServer.hostname ) {
-						jpObjectsList.add(node.jumpServer)
-					}
-				}
-			}
-		}
-		
-		println jpObjectsList
-		println file
-		println file.getClass()
-		
-		if (jpObjectsList.size()) {
-			jpObjectsList.each { node ->
+		if (this.jumpServerList.size()) {
+			this.jumpServerList.each { node ->
 				branches[ node.hostname ] = { node.copyFileToDir(file, node.homeDir) }
 			}
 			this.tools.executeInParallel(branches)
 		}
-		
 		branches = [ : ]
 		this.nodeList.each { node ->
 			if (!destinationDir) {
@@ -60,12 +51,26 @@ class Cluster {
 			}
 			branches[ node.hostname ] = { node.copyFileToDir(file, destinationDir) }
 		}
-		this.tools.executeInParallel(branches)
-		
-		               
+		this.tools.executeInParallel(branches)      
+		return true    
 	}
-
 	
+	Boolean copyRelease(ReleaseNew release, FileNew releaseFile){
+		def branches = [ : ]
+		if (this.jumpServerList.size()) {
+			this.jumpServerList.each { node ->
+				branches[ node.hostname ] = { node.copyFileToDir(releaseFile, node.homeDir) }
+			}
+			this.tools.executeInParallel(branches)
+		}
+		branches = [ : ]
+		this.nodeList.each { node ->
+			branches[ node.hostname ] = { node.copyRelease(release, releaseFile) }
+		}
+		this.tools.executeInParallel(branches)
+		//todo: clean jump server afterwards
+		return true 	
+	}
 }
 
 
