@@ -29,7 +29,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			jumpServerObjects.put(jpId, jpNode)
 		}
 		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
-		jpNode = jumpServerObjects.jpId
+		jpNode = jumpServerObjects.get(jpId)
 		log("DEBUG", "jpId: ${jpId}")
 		log("DEBUG", "jpNode: ${jpNode}")
 	}
