@@ -9,6 +9,7 @@ class Cluster {
 		this.name = name
 		this.nodeList = nodeList
 		this.tools = tools
+		this.jumpServerList = [  ]
 	
 		for (node in this.nodeList) {
 			if (!node.jumpServer) {
