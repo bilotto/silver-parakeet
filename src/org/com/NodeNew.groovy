@@ -6,21 +6,22 @@ class NodeNew {
 	String homeDir
 	NodeNew jumpServer
 	def pipelineTools
-	def tools
+	//def tools
 	String releaseBaseDir
 	NodeNew(user, hostname, homeDir, jumpServer, pipelineTools) {
 		this.user = user
 		this.hostname = hostname
 		this.homeDir = homeDir
 		this.jumpServer = jumpServer
-		this.tools = pipelineTools.tools
+		this.pipelineTools = pipelineTools
+		//this.tools = pipelineTools.tools
 	}
 	
 	def executeCommand(String command, Boolean returnOutput){
 		if (!this.jumpServer) {
-			this.tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
+			this.pipelineTools.tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 		} else {
-			this.tools.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
+			this.pipelineTools.tools.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
 																this.user, this.hostname, command, returnOutput)
 	  	}
 	}
@@ -39,21 +40,21 @@ class NodeNew {
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
-		this.tools.log "Copying file ${file.fullPath} to node ${this.hostname}"
+		this.pipelineTools.log.raiseError "Copying file ${file.fullPath} to node ${this.hostname}"
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
 		if (!this.directoryExists(destinationDir)) {
-			this.tools.error "Directory ${destinationDir} does not exists in node"
+			this.pipelineTools.log "Directory ${destinationDir} does not exists in node"
 		}
 		if (!this.jumpServer) {
 			if (!file.node.jumpServer) {
-				this.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+				this.pipelineTools.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			} else {
 			//todo: the code below is probably failing
 				if (!nodeObject.isTheSameNode(this.jumpServer, file.node.jumpServer)) {
 					//first, copy the file to the jump server from the jump server's side
-					this.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
+					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
 					//now, copy the file from the jumpServer to the node
 					file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
 					newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
@@ -62,14 +63,14 @@ class NodeNew {
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
-			this.tools.log "The node ${this.hostname} has a jump server"
+			this.pipelineTools.log "The node ${this.hostname} has a jump server"
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			this.tools.log "Checking if the file already exists in the jump server"
+			this.pipelineTools.log "Checking if the file already exists in the jump server"
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
 			file.replaceNode(jumpServer, jumpServer.homeDir)
-			this.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+			this.pipelineTools.tools.transferFileBetweenHosts(this.jumpServer.user, this.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			//clean the file in the jump server if you want
 			//file.deleteItself()
 		}
@@ -78,7 +79,7 @@ class NodeNew {
 	
 	Boolean copyRelease(ReleaseNew release, FileNew releaseFile) {
 		if (!this.releaseBaseDir) {
-			this.tools.error "releaseBaseDir not set in node object"
+			this.pipelineTools.log.raiseError "releaseBaseDir not set in node object"
 		}
 		def command = "cd ${this.releaseBaseDir}; if [ -e ${release.filename} ]; then rm -f ${release.filename}; fi"
 		this.execute(command)
