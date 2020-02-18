@@ -6,6 +6,7 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 }
 
 def getNodeProperty(nodeProperties, propertyName){
+	println nodeProperties
 	def propertyValue = null
 	println propertyName.toLowerCase()
 	println propertyName.toUpperCase()
