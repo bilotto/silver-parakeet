@@ -18,10 +18,13 @@ def getNodeProperty(nodeProperties, propertyName){
 	println nodeProperties.get(propertyName.toString())
 	
 	if (nodeProperties.get(propertyName.toLowerCase())) {
+		println "toLowerCase"
 		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
+		println "toUpperCase"
 		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toLowerCase())) {
+		println "nada"
 		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	}
 	//log.raiseError "Node property ${propertyName} not found: nodeProperties: ${nodeProperties}"
@@ -61,7 +64,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	}
 	def user = this.getNodeProperty(nodeProperties, 'user')
 	def hostname = this.getNodeProperty(nodeProperties, 'hostname')
-	def homeDir = this.getNodeProperty(nodeProperties, 'homeDir')
+	def homeDir = this.getNodeProperty(nodeProperties, 'home_dir')
 	node = this.call(user, hostname, homeDir, jpNode)
 	if (this.getNodeProperty(nodeProperties, 'release_base_dir')) {
 		node.releaseBaseDir = this.getNodeProperty(nodeProperties, 'release_base_dir')
