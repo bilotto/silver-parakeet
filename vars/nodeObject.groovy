@@ -6,15 +6,18 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 }
 
 def getNodeProperty(nodeProperties, propertyName){
+	def propertyValue = null
 	if (nodeProperties.get(propertyName.toLowerCase())) {
-		return nodeProperties.get(propertyName.toUpperCase())
+		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
-		return nodeProperties.get(propertyName.toUpperCase())
+		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toLowerCase())) {
-		return nodeProperties.get(propertyName.toUpperCase())
+		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	}
 	//log.raiseError "Node property ${propertyName} not found: nodeProperties: ${nodeProperties}"
-	return null
+	log "propertyName: ${propertyName}"
+	log "propertyValue: ${propertyValue}"
+	return propertyValue
 }
 
 
