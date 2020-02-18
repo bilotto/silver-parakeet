@@ -1,3 +1,4 @@
+@NonCPS
 def getTools(){
     return tools
 }
