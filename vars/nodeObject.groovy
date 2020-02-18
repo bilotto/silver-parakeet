@@ -6,16 +6,12 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 }
 
 def getNodeProperty(nodeProperties, propertyName){
-	def propertyValue = null
 	if (nodeProperties.get(propertyName.toLowerCase())) {
-		println "toLowerCase"
-		return nodeProperties.get(propertyName.toUpperCase())
+		return nodeProperties.get(propertyName.toLowerCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
-		println "toUpperCase"
 		return nodeProperties.get(propertyName.toUpperCase())
-	} else if (nodeProperties.get(propertyName.toLowerCase())) {
-		println "nada"
-		return nodeProperties.get(propertyName.toUpperCase())
+	} else if (nodeProperties.get(propertyName)) {
+		return nodeProperties.get(propertyName)
 	}
 	return null
 }
