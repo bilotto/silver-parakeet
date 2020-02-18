@@ -5,18 +5,31 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 	return new NodeNew(user, hostname, homeDir, jpNode, tools)
 }
 
+def getNodeProperty(nodeProperties, propertyName){
+	if (nodeProperties.get(propertyName.toLowerCase())) {
+		return nodeProperties.get(propertyName.toLowerCase())
+	} else if (nodeProperties.get(propertyName.toUpperCase())) {
+		return nodeProperties.get(propertyName.toUpperCase())
+	} else if (nodeProperties.get(propertyName)) {
+		return nodeProperties.get(propertyName)
+	}
+	return null
+}
+
+
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
-	log("LOG_DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
-	if (nodeProperties.get('JUMP_SERVER')) {
-		jpId = nodeProperties.get('JUMP_SERVER')
+	log("DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
+	if (this.getNodeProperty(nodeProperties, 'jump_server')) {
+		jpId = this.getNodeProperty(nodeProperties, 'jump_server')
+		log("DEBUG", "jpId: ${jpId}")
 		//todo: the variable jumpServerObjects below should be defined in the upper context
 	    try {
 	    	var = {jumpServerObjects}
 	        var()
 	    } catch (exc) {
-	    	log("LOG_DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
+	    	log("DEBUG", "I don't have a jumpServerObjects in the scope. Creating it")
 	    	jumpServerObjects = [ : ]
 	    }
 		if (jumpServerObjects) {
@@ -28,17 +41,17 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 			jpNode = this.createNodeObject(jpId, properties)
 			jumpServerObjects.put(jpId, jpNode)
 		}
-		log("LOG_DEBUG", "jumpServerObjects: ${jumpServerObjects}")
+		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		jpNode = jumpServerObjects.get(jpId)
-		log("LOG_DEBUG", "jpId: ${jpId}")
-		log("LOG_DEBUG", "jpNode: ${jpNode}")
+		log("DEBUG", "jpId: ${jpId}")
+		log("DEBUG", "jpNode: ${jpNode}")
 	}
-	def user = nodeProperties.get('USER')
-	def hostname = nodeProperties.get('HOSTNAME')
-	def homeDir = nodeProperties.get('HOME_DIR')
+	def user = this.getNodeProperty(nodeProperties, 'user')
+	def hostname = this.getNodeProperty(nodeProperties, 'hostname')
+	def homeDir = this.getNodeProperty(nodeProperties, 'home_dir')
 	node = this.call(user, hostname, homeDir, jpNode)
-	if (nodeProperties.get('RELEASE_BASE_DIR')) {
-		node.releaseBaseDir = nodeProperties.get('RELEASE_BASE_DIR')
+	if (this.getNodeProperty(nodeProperties, 'release_base_dir')) {
+		node.releaseBaseDir = this.getNodeProperty(nodeProperties, 'release_base_dir')
 	}
 	return node
 }
@@ -74,7 +87,7 @@ def defaultIfInexistent(varNameExpr, defaultValue) {
     try {
         varNameExpr()
     } catch (exc) {
-    	log("LOG_DEBUG", "Returning default value ${defaultValue} to ${varNameExpr}")
+    	log("DEBUG", "Returning default value ${defaultValue} to ${varNameExpr}")
         defaultValue
     }
 }
