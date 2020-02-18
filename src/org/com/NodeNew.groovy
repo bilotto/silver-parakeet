@@ -40,7 +40,7 @@ class NodeNew {
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
-		this.pipelineTools.log.raiseError "Copying file ${file.fullPath} to node ${this.hostname}"
+		this.pipelineTools.log "Copying file ${file.fullPath} to node ${this.hostname}"
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
