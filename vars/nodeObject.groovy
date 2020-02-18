@@ -5,8 +5,7 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 	return new NodeNew(user, hostname, homeDir, jpNode, tools)
 }
 
-def getNodeProperty(propertyName){
-	//it requires a nodeProperties variable in the previous context
+def getNodeProperty(nodeProperties, propertyName){
 	if (nodeProperties.get(propertyName.toLowerCase())) {
 		return nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
@@ -47,12 +46,12 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 		log("LOG_DEBUG", "jpId: ${jpId}")
 		log("LOG_DEBUG", "jpNode: ${jpNode}")
 	}
-	def user = this.getNodeProperty('user')
-	def hostname = this.getNodeProperty('hostname')
-	def homeDir = this.getNodeProperty('homeDir')
+	def user = this.getNodeProperty(nodeProperties, 'user')
+	def hostname = this.getNodeProperty(nodeProperties, 'hostname')
+	def homeDir = this.getNodeProperty(nodeProperties, 'homeDir')
 	node = this.call(user, hostname, homeDir, jpNode)
-	if (this.getNodeProperty('release_base_dir')) {
-		node.releaseBaseDir = this.getNodeProperty('release_base_dir')
+	if (this.getNodeProperty(nodeProperties, 'release_base_dir')) {
+		node.releaseBaseDir = this.getNodeProperty(nodeProperties, 'release_base_dir')
 	}
 	return node
 }
