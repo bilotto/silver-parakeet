@@ -5,7 +5,6 @@ def call(String logMessage){
 def call(String logType, String logMessage){
 	println logType
 	println logMessage
-	println env.get(logType)
 	if (!env.logType) {
 		return false
 	}
