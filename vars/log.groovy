@@ -3,6 +3,8 @@ def call(String logMessage){
 }
 
 def call(String logType, String logMessage){
+	println logType
+	println logMessage
 	if (!env.logType) {
 		return false
 	}
