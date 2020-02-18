@@ -11,6 +11,10 @@ def getNodeProperty(nodeProperties, propertyName){
 	println propertyName.toLowerCase()
 	println propertyName.toUpperCase()
 	println propertyName
+	println nodeProperties.get(propertyName.toLowerCase())
+	println nodeProperties.get(propertyName.toUpperCase())
+	println nodeProperties.get(propertyName)
+	
 	if (nodeProperties.get(propertyName.toLowerCase())) {
 		propertyValue = nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
