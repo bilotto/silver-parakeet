@@ -12,7 +12,7 @@ class NodeNew {
 		this.hostname = hostname
 		this.homeDir = homeDir
 		this.jumpServer = jumpServer
-		this.tools = pipelineTools.getTools()
+		this.tools = pipelineTools.tools
 	}
 	
 	def executeCommand(String command, Boolean returnOutput){
