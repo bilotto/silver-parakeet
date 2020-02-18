@@ -1,6 +1,9 @@
 def call(){
-	def pipelineEnv = [ : ]
-	pipelineEnv.tools = tools
-	println pipelineEnv
+	def pipelineTools = [ : ]
+	pipelineTools.tools = tools
+	pipelineTools.log = log
+	pipelineTools.regex = regex
+	pipelineTools.slackNotifier = slackNotifier
 	return pipelineEnv
 }
+
