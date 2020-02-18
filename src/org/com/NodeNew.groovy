@@ -97,6 +97,12 @@ class NodeNew {
     	}
     	return false 
 	}
+	
+	String getEnvironmentVariable(var){
+		def command = "env | grep ${var} | awk -F= '{print \$2}'"
+	    this.executeAndGetOutput(command)
+	}
+
 
 
 }
