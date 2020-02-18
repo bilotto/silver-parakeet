@@ -6,31 +6,18 @@ NodeNew call(String user, String hostname, String homeDir, NodeNew jpNode){
 }
 
 def getNodeProperty(nodeProperties, propertyName){
-	println nodeProperties
-	println nodeProperties.getClass()
-	println propertyName.getClass()
 	def propertyValue = null
-	println propertyName.toLowerCase()
-	println propertyName.toUpperCase()
-	println propertyName
-	println nodeProperties.get(propertyName.toLowerCase().toString())
-	println nodeProperties.get(propertyName.toUpperCase().toString())
-	println nodeProperties.get(propertyName.toString())
-	
 	if (nodeProperties.get(propertyName.toLowerCase())) {
 		println "toLowerCase"
-		propertyValue = nodeProperties.get(propertyName.toUpperCase())
+		return nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toUpperCase())) {
 		println "toUpperCase"
-		propertyValue = nodeProperties.get(propertyName.toUpperCase())
+		return nodeProperties.get(propertyName.toUpperCase())
 	} else if (nodeProperties.get(propertyName.toLowerCase())) {
 		println "nada"
-		propertyValue = nodeProperties.get(propertyName.toUpperCase())
+		return nodeProperties.get(propertyName.toUpperCase())
 	}
-	//log.raiseError "Node property ${propertyName} not found: nodeProperties: ${nodeProperties}"
-	log "propertyName: ${propertyName}"
-	log "propertyValue: ${propertyValue}"
-	return propertyValue
+	return null
 }
 
 
@@ -40,6 +27,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	log("LOG_DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
 	if (this.getNodeProperty(nodeProperties, 'jump_server')) {
 		jpId = this.getNodeProperty(nodeProperties, 'jump_server')
+		log("LOG_DEBUG", "jpId: ${jpId}")
 		//todo: the variable jumpServerObjects below should be defined in the upper context
 	    try {
 	    	var = {jumpServerObjects}
