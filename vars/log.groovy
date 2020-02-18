@@ -3,16 +3,16 @@ def call(String logMessage){
 }
 
 def call(String logType, String logMessage){
-	println logType
-	println logMessage
-	println env.logType
-	if (!env.logType) {
-		return false
+	if (logType == "DEBUG") {
+		if (env.DEBUG == "true") {
+			println logMessage                  
+		}
 	}
-	if (env.logType == 'true'){
-		println logMessage
+	if (logType == "ERROR") {
+		if (env.ERROR == "true") {
+			println logMessage                  
+		}
 	}
-	return true
 }
 
 def raiseError(String logMessage){
