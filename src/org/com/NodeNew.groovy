@@ -6,7 +6,7 @@ class NodeNew {
 	String homeDir
 	NodeNew jumpServer
 	def pipelineTools
-	//def tools
+	def tools
 	String releaseBaseDir
 	NodeNew(user, hostname, homeDir, jumpServer, pipelineTools) {
 		this.user = user
@@ -14,7 +14,7 @@ class NodeNew {
 		this.homeDir = homeDir
 		this.jumpServer = jumpServer
 		this.pipelineTools = pipelineTools
-		//this.tools = pipelineTools.tools
+		this.tools = pipelineTools.tools
 	}
 	
 	def executeCommand(String command, Boolean returnOutput){
