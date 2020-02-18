@@ -22,8 +22,8 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
 	def nodeProperties = properties.getNodeProperties(nodeId)
 	log("LOG_DEBUG", "nodeId: ${nodeId} - nodeProperties: ${nodeProperties}")
-	if (nodeProperties.get('JUMP_SERVER')) {
-		jpId = nodeProperties.get('JUMP_SERVER')
+	if (this.getNodeProperty(nodeProperties, 'jump_server')) {
+		jpId = this.getNodeProperty(nodeProperties, 'jump_server')
 		//todo: the variable jumpServerObjects below should be defined in the upper context
 	    try {
 	    	var = {jumpServerObjects}
