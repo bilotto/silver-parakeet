@@ -6,6 +6,7 @@ class NodeNew {
 	String homeDir
 	NodeNew jumpServer
 	def pipelineTools
+	def tools
 	String releaseBaseDir
 	NodeNew(user, hostname, homeDir, jumpServer, pipelineTools) {
 		this.user = user
