@@ -28,7 +28,5 @@ def stackSlackMessage_bkp(message){
 }
 
 def stackSlackMessage(message){
-	if (env.SLACK_MESSAGE) {
-    	env.SLACK_MESSAGE = env.SLACK_MESSAGE + message
-    }
+	env.SLACK_MESSAGE = env.SLACK_MESSAGE + message + "\n"
 }
