@@ -1,6 +1,6 @@
 def make_command(cmd){
 	cmd = cmd.replace("\$", "\\\$")
-	cmd = cmd.replace("\"", "\\\"")
+	//cmd = cmd.replace("\"", "\\\"")
 	return cmd
 }
 
@@ -64,10 +64,8 @@ def execute_remote_command_through_jump_server(jump_server_user, jump_server_hos
 def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
 	remoteCommand = this.make_command(remoteCommand)
 	def cmd = """
-				ssh ${jumpServerUser}@${jumpServerHostname} \
-				\"
-					ssh ${remoteUser}@${remoteHostname} \
-					\\\"
+				ssh ${jumpServerUser}@${jumpServerHostname} \"
+					ssh ${remoteUser}@${remoteHostname} \\\"
 						${remoteCommand}
 					\\\"
 				\"

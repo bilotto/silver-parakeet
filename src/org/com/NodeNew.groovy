@@ -32,20 +32,25 @@ class NodeNew {
 	}
 	
 	String executeAndGetOutput(String command) {
+		def log = this.pipelineTools.log
 		def returnOutput = true
 		def output = this.executeCommand(command, returnOutput)
+		if (!output) {
+			log.raiseError "No output to return"
+		}
 		return output
 	}
 	
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
-		this.pipelineTools.log "Copying file ${file.fullPath} to node ${this.hostname}"
+		def log = this.pipelineTools.log
+		log("INFO", "Copying file ${file.fullPath} to node ${this.hostname}")
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
 		if (!this.directoryExists(destinationDir)) {
-			this.pipelineTools.log "Directory ${destinationDir} does not exists in node"
+			log("INFO", "Directory ${destinationDir} does not exists in node")
 		}
 		if (!this.jumpServer) {
 			if (!file.node.jumpServer) {
@@ -63,9 +68,9 @@ class NodeNew {
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
-			this.pipelineTools.log "The node ${this.hostname} has a jump server"
+			log("DEBUG", "The node ${this.hostname} has a jump server")
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			this.pipelineTools.log "Checking if the file already exists in the jump server"
+			log("DEBUG", "Checking if the file already exists in the jump server")
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
@@ -78,8 +83,9 @@ class NodeNew {
 	}
 	
 	Boolean copyRelease(ReleaseNew release, FileNew releaseFile) {
+		def log = this.pipelineTools.log
 		if (!this.releaseBaseDir) {
-			this.pipelineTools.log.raiseError "releaseBaseDir not set in node object"
+			log.raiseError "releaseBaseDir not set in node object"
 		}
 		def command = "cd ${this.releaseBaseDir}; if [ -e ${release.filename} ]; then rm -f ${release.filename}; fi"
 		this.execute(command)

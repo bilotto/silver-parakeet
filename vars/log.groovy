@@ -1,4 +1,4 @@
-def call(String logMessage){
+def call(logMessage){
 	println logMessage
 }
 
