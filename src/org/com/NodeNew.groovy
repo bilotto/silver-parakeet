@@ -40,12 +40,12 @@ class NodeNew {
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
-		this.pipelineTools.log "Copying file ${file.fullPath} to node ${this.hostname}"
+		this.pipelineTools.log("INFO", "Copying file ${file.fullPath} to node ${this.hostname}")
 		if (!destinationDir) {
 			destinationDir = this.homeDir
 		}
 		if (!this.directoryExists(destinationDir)) {
-			this.pipelineTools.log "Directory ${destinationDir} does not exists in node"
+			this.pipelineTools.log("INFO", "Directory ${destinationDir} does not exists in node")
 		}
 		if (!this.jumpServer) {
 			if (!file.node.jumpServer) {
@@ -63,9 +63,9 @@ class NodeNew {
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
-			this.pipelineTools.log "The node ${this.hostname} has a jump server"
+			this.pipelineTools.log("DEBUG", "The node ${this.hostname} has a jump server")
 			//it copies the file to the jump server (if it's not there yet), and then it copies to the node
-			this.pipelineTools.log "Checking if the file already exists in the jump server"
+			this.pipelineTools.log("DEBUG", "Checking if the file already exists in the jump server")
 			if (!file.existsInNode(this.jumpServer, this.jumpServer.homeDir)) {
 				this.jumpServer.copyFileToDir(file, this.jumpServer.homeDir)
 			}
