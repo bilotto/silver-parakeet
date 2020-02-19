@@ -19,10 +19,16 @@ def bkp(String buildResult, String channel) {
   }
 }
 
-def stackSlackMessage(message){
-  if (!env.SLACK_MESSAGE) {
+def stackSlackMessage_bkp(message){
+  if (env.SLACK_MESSAGE) {
     env.SLACK_MESSAGE = message
   } else {
     env.SLACK_MESSAGE = env.SLACK_MESSAGE + "\n" + message
   }
+}
+
+def stackSlackMessage(message){
+	if (env.SLACK_MESSAGE) {
+    	env.SLACK_MESSAGE = env.SLACK_MESSAGE + message
+    }
 }
