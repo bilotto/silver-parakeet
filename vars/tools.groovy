@@ -1,7 +1,7 @@
 def make_command(cmd){
 	log ("DEBUG", "cmd before: ${cmd}")
 	cmd = cmd.replace("\$", "\\\$")
-	//cmd = cmd.replace("\"", "\\\"")
+	cmd = cmd.replace("\"", "\\\"")
 	log ("DEBUG", "cmd after: ${cmd}")
 	return cmd
 }
