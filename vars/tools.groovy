@@ -4,7 +4,7 @@ def make_command(cmd){
 	cmd = cmd.replace("\$", "\\\$")
 	//if it finds a " scaped, scape it to the next level by adding \\ before it
 	cmd = cmd.replace("\"", "\\\"")
-	cmd = cmd.replace("\\\$", "\\\\\$")
+	cmd = cmd.replace("\\\$", "\\\\\\\$")
 	log ("DEBUG", "cmd after: ${cmd}")
 	return cmd
 }
