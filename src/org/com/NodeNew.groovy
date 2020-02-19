@@ -32,8 +32,12 @@ class NodeNew {
 	}
 	
 	String executeAndGetOutput(String command) {
+		def log = this.pipelineTools.log
 		def returnOutput = true
 		def output = this.executeCommand(command, returnOutput)
+		if (!output) {
+			log.raiseError "No output to return"
+		}
 		return output
 	}
 	
