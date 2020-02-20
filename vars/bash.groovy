@@ -17,9 +17,9 @@ def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 
 def executeLocalCommand(command, returnOutput){
 	if (!returnOutput) {
-		sh "${cmd}"
+		sh "${command}"
 	} else {
-       def stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+       def stdout = sh (returnStdout: true, script: "${command}").trim().toString()
        return stdout
   	}
 }
@@ -38,7 +38,5 @@ def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, St
 					${remoteCommand}
 				'
 			"""
-	this.executeLocalCommand(command, returnOutput)
-	
-			
+	this.executeLocalCommand(command, returnOutput)		
 }
