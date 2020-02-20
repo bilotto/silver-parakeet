@@ -72,7 +72,7 @@ def runCmdOnNodeSavingExitCodeAndStdout(cmd) {
     def tempFileName = 'runCmdOnNodeSavingExitCodeAndStdout_' + UUID.randomUUID() + '.txt'
     def tempFilePath = this.getTempDirOnNode() + "/" + tempFileName
     
-    rc = sh(script: cmd + ' > ' + tempFilePath, returnStatus: true)
+    rc = sh(script: "${cmd} > ${tempFilePath}", returnStatus: true)
     stdout = readFile(tempFilePath).trim()
     
     log("DEBUG", "stdout: ${stdout}")
