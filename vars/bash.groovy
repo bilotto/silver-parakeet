@@ -1,3 +1,12 @@
+def stringToCommand(cmd){
+	log ("DEBUG", "cmd before: ${cmd}")
+	cmd = cmd.replace("\$", "\\\$")
+	cmd = cmd.replace("\"", "\\\"")
+	log ("DEBUG", "cmd after: ${cmd}")
+	return cmd
+}
+
+
 def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 	remoteCommand = this.stringToCommand(remoteCommand)
 	def cmd = """
