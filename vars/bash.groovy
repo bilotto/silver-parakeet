@@ -1,11 +1,8 @@
-def stringToCommand(cmd){
-	log ("DEBUG", "cmd before: ${cmd}")
-	cmd = cmd.replace("\$", "\\\$")
-	cmd = cmd.replace("\"", "\\\"")
-	log ("DEBUG", "cmd after: ${cmd}")
-	return cmd
+def stringToCommand(commandString){
+	commandString = commandString.replace("\$", "\\\$")
+	commandString = commandString.replace("\"", "\\\"")
+	return commandString
 }
-
 
 def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 	remoteCommand = this.stringToCommand(remoteCommand)
@@ -19,11 +16,11 @@ def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 }
 
 def executeLocalCommand(command, returnOutput){
-	if (returnOutput) {
-	       stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
-	       return stdout
+	if (!returnOutput) {
+		sh "${cmd}"
 	} else {
-	      sh "${cmd}"
+       def stdout = sh (returnStdout: true, script: "${cmd}").trim().toString()
+       return stdout
   	}
 }
 
