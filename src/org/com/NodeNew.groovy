@@ -27,6 +27,15 @@ class NodeNew {
 	  	}
 	}
 	
+	Boolean isTheSameNode(NodeNew node) {
+		if (node != this) {
+			if ( node.user != this.user || node.hostname != this.hostname ) {
+				return false
+			}
+		}
+		return true
+	}
+	
 	void execute(String command) {
 		def returnOutput = false
 		this.executeCommand(command, returnOutput)
@@ -56,13 +65,11 @@ class NodeNew {
 			if (!file.node.jumpServer) {
 				this.pipelineTools.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			} else {
-				//first, copy the file to the jump server from the jump server's side
-				this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
-				//now, copy the file from the jumpServer to the node
-				file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
-				newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
-				this.copyFileToDir(newFile, destinationDir)
-				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
+				if ( this.isTheSameNode(file.node.jumpServer) ) {
+					log("DEBUG", "The nodes are the same")
+					//first, copy the file to the jump server from the jump server's side
+					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, this.homeDir)
+				}
 			}
 		} else {
 			log("DEBUG", "The node ${this.hostname} has a jump server")
