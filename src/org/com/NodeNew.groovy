@@ -56,15 +56,12 @@ class NodeNew {
 			if (!file.node.jumpServer) {
 				this.pipelineTools.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			} else {
-			//todo: the code below is probably failing
-				if (!nodeObject.isTheSameNode(this.jumpServer, file.node.jumpServer)) {
-					//first, copy the file to the jump server from the jump server's side
-					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
-					//now, copy the file from the jumpServer to the node
-					file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
-					newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
-					this.copyFileToDir(newFile, destinationDir)
-				}
+				//first, copy the file to the jump server from the jump server's side
+				this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
+				//now, copy the file from the jumpServer to the node
+				file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
+				newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
+				this.copyFileToDir(newFile, destinationDir)
 				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
