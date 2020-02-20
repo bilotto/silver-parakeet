@@ -16,17 +16,22 @@ def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 }
 
 
-def executeLocalCommand_bkp(command, returnOutput){
+def executeLocalCommand(command, returnOutput){
 	if (!returnOutput) {
 		sh "${command}"
 	} else {
-       def stdout = sh (returnStdout: true, script: "${command}").trim().toString()
-       return stdout
+		try {
+			def stdout = sh (returnStdout: true, script: "${command}").trim().toString()
+			return stdout
+		} catch(Exception ex) {
+			println("Catching the exception")
+			println stdout
+		}
   	}
 }
 
 
-def executeLocalCommand(command, returnOutput){
+def executeLocalCommand_bkp(command, returnOutput){
 	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
 	if (returnOutput) {
 		return commandResult[ 1 ]
