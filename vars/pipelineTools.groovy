@@ -4,6 +4,7 @@ def call(){
 	pipelineTools.log = log
 	pipelineTools.regex = regex
 	pipelineTools.slackNotifier = slackNotifier
+	pipelineTools.bash = bash
 	return pipelineTools
 }
 
