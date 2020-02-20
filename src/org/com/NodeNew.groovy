@@ -18,10 +18,11 @@ class NodeNew {
 	}
 	
 	def executeCommand(String command, Boolean returnOutput){
+		def bash = this.pipelineTools.bash
 		if (!this.jumpServer) {
-			this.pipelineTools.tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
+			bash.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 		} else {
-			this.pipelineTools.tools.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
+			bash.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
 																this.user, this.hostname, command, returnOutput)
 	  	}
 	}
@@ -40,7 +41,6 @@ class NodeNew {
 		}
 		return output
 	}
-	
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
@@ -104,6 +104,7 @@ class NodeNew {
     	return false 
 	}
 	
+	//this method only works if the env variable is in the .bashrc file and not .bash_profile
 	String getEnvironmentVariable(var){
 		def command = "env | grep ${var}"
 	    def output = this.executeAndGetOutput(command)
