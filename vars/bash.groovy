@@ -78,7 +78,7 @@ def runCmdOnNodeSavingExitCodeAndStdout(cmd) {
     log("DEBUG", "stdout: ${stdout}")
 
     // Delete temporary file from the node
-	sh(script: 'rm -f ' + tempFilePath, returnStatus: true)
+	//sh(script: 'rm -f ' + tempFilePath, returnStatus: true)
     
     return [ rc, stdout ]
 }
