@@ -16,7 +16,7 @@ def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 }
 
 
-def executeLocalCommand(command, returnOutput){
+def executeLocalCommand_bkp(command, returnOutput){
 	if (!returnOutput) {
 		sh "${command}"
 	} else {
@@ -25,13 +25,13 @@ def executeLocalCommand(command, returnOutput){
 			return stdout
 		} catch(Exception ex) {
 			println("Catching the exception")
-			println stdout
+			return null
 		}
   	}
 }
 
 
-def executeLocalCommand_bkp(command, returnOutput){
+def executeLocalCommand(command, returnOutput){
 	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
 	if (returnOutput) {
 		return commandResult[ 1 ]
@@ -77,7 +77,11 @@ def runCmdOnNodeSavingExitCodeAndStdout(cmd) {
     def tempFileName = 'runCmdOnNodeSavingExitCodeAndStdout_' + UUID.randomUUID() + '.txt'
     def tempFilePath = this.getTempDirOnNode() + "/" + tempFileName
     
-    rc = sh(script: "${cmd} > ${tempFilePath}", returnStatus: true)
+    def command = "${cmd} > ${tempFilePath}"
+    
+    println command
+    
+    rc = sh(script: "${command}", returnStatus: true)
     stdout = readFile(tempFilePath).trim()
     
     log("DEBUG", "stdout: ${stdout}")
