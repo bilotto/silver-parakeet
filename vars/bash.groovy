@@ -6,12 +6,13 @@ String stringToCommand(String commandString){
 
 String makeSshCommand(String remoteUser, String remoteHostname, String remoteCommand){
 	remoteCommand = this.stringToCommand(remoteCommand)
-	def cmd = """
-				ssh ${remoteUser}@${remoteHostname} \
-				\"
-					${remoteCommand}
-				\"
-			"""
+	//def cmd = """
+	//			ssh ${remoteUser}@${remoteHostname} \
+	//			\"
+	//				${remoteCommand}
+	//			\"
+	//		"""
+	def cmd = "ssh ${remoteUser}@${remoteHostname} \"${remoteCommand}\" "
 	return cmd   
 }
 
@@ -50,12 +51,13 @@ List executeRemoteCommand(String remoteUser, String remoteHostname, String remot
 
 List executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand) {
 	remoteCommand = this.makeSshCommand(remoteUser, remoteHostname, remoteCommand)
-	def command = """
-				ssh ${jumpServerUser}@${jumpServerHostname} \
-				'
-					${remoteCommand}
-				'
-			"""
+	//def command = """
+	//			ssh ${jumpServerUser}@${jumpServerHostname} \
+	//			'
+	//				${remoteCommand}
+	//			'
+	//		"""
+	def command = "ssh ${jumpServerUser}@${jumpServerHostname} '${remoteCommand}'"
 	def commandResult = this.executeLocalCommand(command)	
 	return commandResult	
 }
