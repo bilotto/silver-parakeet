@@ -43,7 +43,7 @@ List executeLocalCommand(command){
 
 List executeRemoteCommand(String remoteUser, String remoteHostname, String remoteCommand) {
 	def command = this.makeSshCommand(remoteUser, remoteHostname, remoteCommand)
-	this.executeLocalCommand(command)
+	def commandResult = this.executeLocalCommand(command)
 	return commandResult
 }
 
@@ -56,7 +56,7 @@ List executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, S
 					${remoteCommand}
 				'
 			"""
-	this.executeLocalCommand(command)	
+	def commandResult = this.executeLocalCommand(command)	
 	return commandResult	
 }
 
