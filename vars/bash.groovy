@@ -1,10 +1,10 @@
-def stringToCommand(commandString){
+String stringToCommand(String commandString){
 	commandString = commandString.replace("\$", "\\\$")
 	commandString = commandString.replace("\"", "\\\"")
 	return commandString
 }
 
-def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
+String makeSshCommand(String remoteUser, String remoteHostname, String remoteCommand){
 	remoteCommand = this.stringToCommand(remoteCommand)
 	def cmd = """
 				ssh ${remoteUser}@${remoteHostname} \
@@ -15,36 +15,40 @@ def makeSshCommand(remoteUser, remoteHostname, remoteCommand){
 	return cmd   
 }
 
+String printWithNoTrace(command) {
+	command = '#!/bin/sh -e\n ' + command
+	return command
+}
 
-def executeLocalCommand_bkp(command, returnOutput){
-	if (!returnOutput) {
-		sh "${command}"
-	} else {
-		try {
-			def stdout = sh (returnStdout: true, script: "${command}").trim().toString()
-			return stdout
-		} catch(Exception ex) {
-			println("Catching the exception")
-			return null
-		}
-  	}
+List runCmdOnNodeSavingExitCodeAndStdout(String cmd) {
+    def rc = 0
+    def stdout = null
+    def tempFileName = 'tmp_' + UUID.randomUUID()
+    def tempFilePath = "/tmp/" + tempFileName
+	def command = "${cmd} > ${tempFilePath} 2>&1"
+    rc = sh(script: "${command}", returnStatus: true)
+    stdout = readFile(tempFilePath).trim()
+    log("DEBUG", "${stdout}")
+    // Delete temporary file from the node
+	sh(script: this.printWithNoTrace('rm -f ') + tempFilePath, returnStatus: true)
+    return [ rc, stdout ]
 }
 
 
-def executeLocalCommand(command, returnOutput){
+List executeLocalCommand(command){
 	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
-	if (returnOutput) {
-		return commandResult[ 1 ]
-	}
+	return commandResult
 }
 
-def executeRemoteCommand(String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
+
+List executeRemoteCommand(String remoteUser, String remoteHostname, String remoteCommand) {
 	def command = this.makeSshCommand(remoteUser, remoteHostname, remoteCommand)
-	this.executeLocalCommand(command, returnOutput)
+	this.executeLocalCommand(command)
+	return commandResult
 }
 
 
-def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
+List executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand) {
 	remoteCommand = this.makeSshCommand(remoteUser, remoteHostname, remoteCommand)
 	def command = """
 				ssh ${jumpServerUser}@${jumpServerHostname} \
@@ -52,7 +56,8 @@ def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, St
 					${remoteCommand}
 				'
 			"""
-	this.executeLocalCommand(command, returnOutput)		
+	this.executeLocalCommand(command)	
+	return commandResult	
 }
 
 
@@ -65,29 +70,3 @@ def transferFileBetweenHosts(String sourceUser, String sourceHostname, String fi
 }
 
 
-
-def getTempDirOnNode() {
-	return env.TMPDIR != null ? env.TMPDIR : '/tmp'
-}
-
-/*  May not work if "cmd" already contains output redirection or more complex shell syntax. */
-def runCmdOnNodeSavingExitCodeAndStdout(cmd) {
-    def rc = 0
-    def stdout = null
-    def tempFileName = 'runCmdOnNodeSavingExitCodeAndStdout_' + UUID.randomUUID() + '.txt'
-    def tempFilePath = this.getTempDirOnNode() + "/" + tempFileName
-    
-    def command = "${cmd} | tee ${tempFilePath}"
-    
-    println command
-    
-    rc = sh(script: "${command}", returnStatus: true)
-    stdout = readFile(tempFilePath).trim()
-    
-    log("DEBUG", "stdout: ${stdout}")
-
-    // Delete temporary file from the node
-	//sh(script: 'rm -f ' + tempFilePath, returnStatus: true)
-    
-    return [ rc, stdout ]
-}
