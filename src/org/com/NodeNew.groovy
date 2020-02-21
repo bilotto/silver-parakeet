@@ -17,12 +17,12 @@ class NodeNew {
 		this.tools = pipelineTools.tools
 	}
 	
+	
 	def executeCommand(String command, Boolean returnOutput){
-		def bash = this.pipelineTools.bash
 		if (!this.jumpServer) {
-			bash.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
+			this.pipelineTools.tools.executeRemoteCommand(this.user, this.hostname, command, returnOutput)
 		} else {
-			bash.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
+			this.pipelineTools.tools.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
 																this.user, this.hostname, command, returnOutput)
 	  	}
 	}
@@ -37,11 +37,20 @@ class NodeNew {
 	}
 	
 	void execute(String command) {
+		this.executeCommandNew(command)
+	}
+	
+	String executeAndGetOutput(String command) {
+		def stdout = this.execute(command)
+		return stdout
+	}
+	
+	void execute_old(String command) {
 		def returnOutput = false
 		this.executeCommand(command, returnOutput)
 	}
 	
-	String executeAndGetOutput(String command) {
+	String executeAndGetOutput_old(String command) {
 		def log = this.pipelineTools.log
 		def returnOutput = true
 		def output = this.executeCommand(command, returnOutput)
@@ -49,6 +58,20 @@ class NodeNew {
 			log.raiseError "No output to return"
 		}
 		return output
+	}
+	
+	def executeCommandNew(String command){
+		def bash = this.pipelineTools.bash
+		def commandResult
+		if (!this.jumpServer) {
+			commandResult = bash.executeRemoteCommand(this.user, this.hostname, command)
+		} else {
+			commandResult = bash.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
+																this.user, this.hostname, command)
+	  	}
+	  	def resultCode = commandResult[ 0 ]
+	  	def stdout = commandResult[ 1 ]
+	  	return stdout
 	}
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
