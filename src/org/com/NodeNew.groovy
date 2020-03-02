@@ -8,6 +8,7 @@ class NodeNew {
 	def pipelineTools
 	def tools
 	String releaseBaseDir
+	String nodeId
 	NodeNew(user, hostname, homeDir, jumpServer, pipelineTools) {
 		this.user = user
 		this.hostname = hostname
@@ -62,6 +63,7 @@ class NodeNew {
 	
 	def executeCommandNew(String command){
 		def bash = this.pipelineTools.bash
+		def log = this.pipelineTools.log
 		def commandResult
 		if (!this.jumpServer) {
 			commandResult = bash.executeRemoteCommand(this.user, this.hostname, command)
@@ -70,6 +72,9 @@ class NodeNew {
 																this.user, this.hostname, command)
 	  	}
 	  	def resultCode = commandResult[ 0 ]
+	  	if (resultCode != 0) {
+	  		log("ERROR", "Command return an error code")
+	  	}
 	  	def stdout = commandResult[ 1 ]
 	  	return stdout
 	}
