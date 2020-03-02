@@ -16,6 +16,24 @@ def getNodeProperty(nodeProperties, propertyName){
 	return null
 }
 
+Map call(nodeListId, properties){
+	def nodeObjects = [ : ]
+	jumpServerObjects = [ : ]
+	nodeIdList = properties.getNodeList(nodeListId)
+	if (!nodeIdList.size()){
+		log "${nodeListId} is probably a standalone node"
+		nodeId = nodeListId
+	    nodeIdList.add(nodeId)
+	}
+	nodeIdList.each { nodeId ->
+		println nodeId
+		node = this.createNodeObject(nodeId, properties)
+		println node
+		nodeObjects.put(nodeId, node)
+	}
+	return nodeObjects
+}
+
 
 NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	def jpNode = null
@@ -43,8 +61,6 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 		}
 		log("DEBUG", "jumpServerObjects: ${jumpServerObjects}")
 		jpNode = jumpServerObjects.get(jpId)
-		log("DEBUG", "jpId: ${jpId}")
-		log("DEBUG", "jpNode: ${jpNode}")
 	}
 	def user = this.getNodeProperty(nodeProperties, 'user')
 	def hostname = this.getNodeProperty(nodeProperties, 'hostname')
@@ -53,6 +69,7 @@ NodeNew createNodeObject(String nodeId, PropertiesNew properties){
 	if (this.getNodeProperty(nodeProperties, 'release_base_dir')) {
 		node.releaseBaseDir = this.getNodeProperty(nodeProperties, 'release_base_dir')
 	}
+	log("INFO", node.getProperties().toString())
 	return node
 }
 
