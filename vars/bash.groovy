@@ -1,6 +1,7 @@
 String stringToCommand(String commandString){
 	commandString = commandString.replace("\$", "\\\$")
 	commandString = commandString.replace("\"", "\\\"")
+	commandString = commandString.replace("'", "'\"'\"'")
 	return commandString
 }
 
