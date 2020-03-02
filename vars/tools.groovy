@@ -1,6 +1,11 @@
 def make_command(cmd){
+	log ("DEBUG", "cmd before: ${cmd}")
+	//if it finds a $ scaped, scape it to the next level by adding \\ before it
 	cmd = cmd.replace("\$", "\\\$")
-	//cmd = cmd.replace("\"", "\\\"")
+	//if it finds a " scaped, scape it to the next level by adding \\ before it
+	cmd = cmd.replace("\"", "\\\"")
+	cmd = cmd.replace("\\\$", "\\\\\\\$")
+	log ("DEBUG", "cmd after: ${cmd}")
 	return cmd
 }
 
@@ -62,6 +67,23 @@ def execute_remote_command_through_jump_server(jump_server_user, jump_server_hos
 }
 
 def executeRemoteCommandThroughJumpServer(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
+	remoteCommand = this.make_command(remoteCommand)
+	def cmd = """
+				ssh ${remoteUser}@${remoteHostname} \
+				\"
+					${remoteCommand}
+				\"
+			"""
+
+	if (returnOutput) {
+			stdout = this.executeRemoteCommand(jumpServerUser, jumpServerHostname, cmd, returnOutput)
+	       	return stdout
+	} else {
+	      this.executeRemoteCommand(jumpServerUser, jumpServerHostname, cmd, false)
+  	}
+}
+
+def executeRemoteCommandThroughJumpServer_bkp(jumpServerUser, jumpServerHostname, String remoteUser, String remoteHostname, String remoteCommand, Boolean returnOutput) {
 	remoteCommand = this.make_command(remoteCommand)
 	def cmd = """
 				ssh ${jumpServerUser}@${jumpServerHostname} \"

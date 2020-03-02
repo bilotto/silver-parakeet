@@ -8,6 +8,7 @@ class NodeNew {
 	def pipelineTools
 	def tools
 	String releaseBaseDir
+	String nodeId
 	NodeNew(user, hostname, homeDir, jumpServer, pipelineTools) {
 		this.user = user
 		this.hostname = hostname
@@ -16,6 +17,7 @@ class NodeNew {
 		this.pipelineTools = pipelineTools
 		this.tools = pipelineTools.tools
 	}
+	
 	
 	def executeCommand(String command, Boolean returnOutput){
 		if (!this.jumpServer) {
@@ -26,12 +28,30 @@ class NodeNew {
 	  	}
 	}
 	
+	Boolean isTheSameNode(NodeNew node) {
+		if (node != this) {
+			if ( node.user != this.user || node.hostname != this.hostname ) {
+				return false
+			}
+		}
+		return true
+	}
+	
 	void execute(String command) {
+		this.executeCommandNew(command)
+	}
+	
+	String executeAndGetOutput(String command) {
+		def stdout = this.execute(command)
+		return stdout
+	}
+	
+	void execute_old(String command) {
 		def returnOutput = false
 		this.executeCommand(command, returnOutput)
 	}
 	
-	String executeAndGetOutput(String command) {
+	String executeAndGetOutput_old(String command) {
 		def log = this.pipelineTools.log
 		def returnOutput = true
 		def output = this.executeCommand(command, returnOutput)
@@ -41,6 +61,23 @@ class NodeNew {
 		return output
 	}
 	
+	def executeCommandNew(String command){
+		def bash = this.pipelineTools.bash
+		def log = this.pipelineTools.log
+		def commandResult
+		if (!this.jumpServer) {
+			commandResult = bash.executeRemoteCommand(this.user, this.hostname, command)
+		} else {
+			commandResult = bash.executeRemoteCommandThroughJumpServer(jumpServer.user, jumpServer.hostname, \
+																this.user, this.hostname, command)
+	  	}
+	  	def resultCode = commandResult[ 0 ]
+	  	if (resultCode != 0) {
+	  		log("ERROR", "Command return an error code")
+	  	}
+	  	def stdout = commandResult[ 1 ]
+	  	return stdout
+	}
 	
 	//todo: if two nodes share the same jump server, they can connect with each other without the jump server
 	Boolean copyFileToDir(FileNew file, String destinationDir) {
@@ -56,16 +93,11 @@ class NodeNew {
 			if (!file.node.jumpServer) {
 				this.pipelineTools.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 			} else {
-			//todo: the code below is probably failing
-				if (!nodeObject.isTheSameNode(this.jumpServer, file.node.jumpServer)) {
+				if ( this.isTheSameNode(file.node.jumpServer) ) {
+					log("DEBUG", "The nodes are the same")
 					//first, copy the file to the jump server from the jump server's side
-					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, jumpServer.user, jumpServer.hostname, jumpServer.homeDir)
-					//now, copy the file from the jumpServer to the node
-					file.replaceNode(file.node.jumpServer, jumpServer.homeDir)
-					newFile = fileObject(file.name, jp_server.homeDir, file.node.jumpServer)
-					this.copyFileToDir(newFile, destinationDir)
+					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, this.homeDir)
 				}
-				//todo: if the nodes share the same jump server, it asssumes they connect with each other without the jump server
 			}
 		} else {
 			log("DEBUG", "The node ${this.hostname} has a jump server")
@@ -104,6 +136,7 @@ class NodeNew {
     	return false 
 	}
 	
+	//this method only works if the env variable is in the .bashrc file and not .bash_profile
 	String getEnvironmentVariable(var){
 		def command = "env | grep ${var}"
 	    def output = this.executeAndGetOutput(command)

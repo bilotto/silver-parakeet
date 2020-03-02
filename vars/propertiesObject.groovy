@@ -5,7 +5,7 @@ def call(propertiesMap) {
 }
 
 Map loadPropertiesFromLibrary(String libraryName) {
-	log "Loading properties from library ${libraryName}"
+	log("INFO", "Loading properties from library ${libraryName}")
 	jenkinsWorkspaceDir = env.JENKINS_HOME + "/" + "workspace"
 	librariesDirectory =  jenkinsWorkspaceDir + "/" + "${env.JOB_NAME}@libs"
 	libraryDirectory = librariesDirectory + "/" + libraryName
@@ -16,8 +16,9 @@ Map loadPropertiesFromLibrary(String libraryName) {
 }
 
 List listPropertiesFiles(propertiesFilesPath) {
-	command = "cd ${propertiesFilesPath}; find . -type f"
-	properties_files = tools.executeLocalCommand(command, true)
+	def command = "cd ${propertiesFilesPath}; find . -type f"
+	commandResult = bash.executeLocalCommand(command)
+	properties_files = commandResult[ 1 ]
 	list = [  ]
 	properties_files.tokenize("\n").each { fileRelativePath ->
 		//remove ./ from the bash's output
@@ -32,7 +33,7 @@ Map generatePropertiesMap(propertiesFiles) {
 	propertiesMap = [ : ]
 	
 	propertiesFiles.each { fileRelativePath ->
-		fileDir = "properties/"
+		fileDir = "properties"
 		baseMap = propertiesMap
 		slashChar = fileRelativePath.indexOf("/")
 		lastItKey = null
@@ -59,7 +60,7 @@ Map generatePropertiesMap(propertiesFiles) {
 		}
 		
 		fileName = fileRelativePath
-		log "Importing properties from file ${fileDir}/${fileName}"
+		log("INFO", "Importing properties from file ${fileDir}/${fileName}")
 		dotChar = fileName.indexOf(".")
 		key = fileName[ 0..(dotChar - 1) ].toUpperCase()
 		writeFile(file: "${fileName}", text: libraryResource("${fileDir}/${fileName}"), encoding: "UTF-8")
@@ -68,7 +69,7 @@ Map generatePropertiesMap(propertiesFiles) {
 			log.raiseError "Properties file ${fileDir}/${fileName} must contain the same name as its first key"
 		}
 		baseMap.put(key, yamlMap.get(key))
-		tools.executeLocalCommand("rm ${fileName}", false)
+		bash.executeLocalCommand("rm ${fileName}")
 	}
 	return propertiesMap
 }
