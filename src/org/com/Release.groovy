@@ -122,7 +122,7 @@ def create_release() {
 	workspace_name = release_name
 
 	build_properties = releaseEnv.get('git_properties')
-	build_base_dir = build_properties.get('BUILD_BASE_DIR').toString()
+	build_base_dir = build_properties.get('RELEASE_BASE_DIR').toString()
 	images_base_dir = build_properties.get('PROD_INSTALL_IMAGE')
 	git_path = build_properties.get('PROJECT_GIT_PATH')
 	installer_dir = build_properties.get('INSTALLER_GIT_PATH')
