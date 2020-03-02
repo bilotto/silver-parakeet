@@ -15,6 +15,7 @@ def call(String name, String directory, NodeNew node) {
 	def cksumCommand = "cd ${file.directory}; cksum ${file.name}"
 	file.cksum = node.executeAndGetOutput(cksumCommand)
 	log("DEBUG", "File cksum: ${file.cksum}")
+	log("INFO", file.getProperties().toString())
 	return file
 }
 
