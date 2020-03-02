@@ -17,7 +17,8 @@ Map loadPropertiesFromLibrary(String libraryName) {
 
 List listPropertiesFiles(propertiesFilesPath) {
 	def command = "cd ${propertiesFilesPath}; find . -type f"
-	properties_files = bash.executeLocalCommand(command)
+	commandResult = bash.executeLocalCommand(command)
+	properties_files = commandResult[ 1 ]
 	list = [  ]
 	properties_files.tokenize("\n").each { fileRelativePath ->
 		//remove ./ from the bash's output
