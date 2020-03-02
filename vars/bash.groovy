@@ -1,7 +1,6 @@
 String stringToCommand(String commandString){
 	commandString = commandString.replace("\$", "\\\$")
 	commandString = commandString.replace("\"", "\\\"")
-	commandString = commandString.replace("'", "'\\'")
 	return commandString
 }
 
@@ -14,6 +13,7 @@ String makeSshCommand(String remoteUser, String remoteHostname, String remoteCom
 	//			\"
 	//		"""
 	def cmd = "ssh ${remoteUser}@${remoteHostname} \"${remoteCommand}\" "
+	log("DEBUG", "makeSshCommand::command:: ${cmd} ")
 	return cmd   
 }
 
@@ -28,7 +28,7 @@ List runCmdOnNodeSavingExitCodeAndStdout(String cmd) {
     def tempFileName = 'tmp_' + UUID.randomUUID()
     def tempFilePath = "/tmp/" + tempFileName
 	def command = "${cmd} > ${tempFilePath} 2>&1"
-    rc = sh(script: "${command}", returnStatus: true)
+    rc = sh(script: command, returnStatus: true)
     stdout = readFile(tempFilePath).trim()
     log("DEBUG", "${stdout}")
     // Delete temporary file from the node
