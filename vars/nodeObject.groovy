@@ -16,7 +16,7 @@ def create_node_obj(Map node_properties, Properties properties){
 	}
 	user = node_properties.get('USER')
 	hostname = node_properties.get('HOSTNAME')
-	base_dir = node_properties.get('BASE_DIR')
+	base_dir = node_properties.get('RELEASE_BASE_DIR')
 	node = this.call(user, hostname, base_dir, jp_node)
 	return node
 }
@@ -24,7 +24,7 @@ def create_node_obj(Map node_properties, Properties properties){
 def create_node_object(node_properties, jump_server_objects){
 	def user = node_properties.USER
 	def hostname = node_properties.HOSTNAME
-	def base_dir = node_properties.BASE_DIR
+	def base_dir = node_properties.RELEASE_BASE_DIR
 	def jp_id = node_properties.JUMP_SERVER
 	if (jp_id) {
 		jump_server = jump_server_objects.get(jp_id)
