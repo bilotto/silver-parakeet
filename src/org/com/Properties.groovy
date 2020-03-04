@@ -55,7 +55,8 @@ def get_install_properties(String node_id) {
 }
 
 def get_list_of_nodes(String pm_send_to_env) {
-	node_list_map = mergeMaps(propertiesEnv.get('NODE_LIST'), propertiesEnv.get('PROD_NODE_LIST'))
+	def nodeListMap = propertiesEnv.get('NODE_LIST')
+	node_list_map = mergeMaps(nodeListMap.get('DEV'), nodeListMap.get('PRODUCTION'))
 	nodeListKey = pm_send_to_env.toString()
 	node_list = []
 	if (node_list_map.get(nodeListKey)) {
