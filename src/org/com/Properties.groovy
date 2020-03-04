@@ -77,12 +77,11 @@ def mapKeys(map) {
 
 def get_environment_parameter_list(Boolean include_production) {
 	//get nodes list to be put as parameter
+	def nodeListMap = propertiesEnv.get('NODE_LIST')
 	parameter_node_list = [ 'Select environment' ]
-	parameter_node_list = parameter_node_list.plus(this.mapKeys(propertiesEnv.NODE_LIST))
-	parameter_node_list = parameter_node_list.plus(this.mapKeys(propertiesEnv.NODES.MAQUETA_NODES))
+	parameter_node_list = parameter_node_list.plus(this.mapKeys(nodeListMap.DEV))
 	if (include_production) {
-		parameter_node_list = parameter_node_list.plus(this.mapKeys(propertiesEnv.PROD_NODE_LIST))
-		parameter_node_list = parameter_node_list.plus(this.mapKeys(propertiesEnv.NODES.PROD_NODES))
+		parameter_node_list = parameter_node_list.plus(this.mapKeys(nodeListMap.PRODUCTION))
 	}
 	return parameter_node_list
 }
