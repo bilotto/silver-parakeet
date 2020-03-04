@@ -16,7 +16,7 @@ def create_node_obj(Map node_properties, Properties properties){
 	}
 	user = node_properties.get('USER')
 	hostname = node_properties.get('HOSTNAME')
-	base_dir = node_properties.get('BASE_DIR')
+	base_dir = node_properties.get('RELEASE_BASE_DIR')
 	node = this.call(user, hostname, base_dir, jp_node)
 	return node
 }
