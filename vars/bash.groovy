@@ -35,8 +35,13 @@ List runCmdOnNodeSavingExitCodeAndStdout(String cmd) {
     return [ rc, stdout ]
 }
 
-
 List executeLocalCommand(command){
+	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
+	return commandResult
+}
+
+List executeLocalCommandWithNoTrace(command){
+	command = this.printWithNoTrace(commmand)
 	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
 	return commandResult
 }
