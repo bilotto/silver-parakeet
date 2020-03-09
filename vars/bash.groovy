@@ -41,9 +41,8 @@ List executeLocalCommand(command){
 }
 
 List executeLocalCommandWithNoTrace(command){
-	command = this.printWithNoTrace(commmand)
-	commandResult = this.runCmdOnNodeSavingExitCodeAndStdout(command)
-	return commandResult
+	def commandWithNoTrace = this.printWithNoTrace(command)
+	this.executeLocalCommand(commandWithNoTrace)
 }
 
 
