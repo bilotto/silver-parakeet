@@ -69,7 +69,7 @@ Map generatePropertiesMap(propertiesFiles) {
 			log.raiseError "Properties file ${fileDir}/${fileName} must contain the same name as its first key"
 		}
 		baseMap.put(key, yamlMap.get(key))
-		bash.executeLocalCommand("rm ${fileName}")
+		bash.executeLocalCommandWithNoTrace("rm ${fileName}")
 	}
 	return propertiesMap
 }
