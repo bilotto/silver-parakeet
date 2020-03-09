@@ -5,7 +5,7 @@ def call(propertiesMap) {
 }
 
 Map loadPropertiesFromLibrary(String libraryName) {
-	log("INFO", "Loading properties from library ${libraryName}")
+	log("Loading properties from library ${libraryName}")
 	jenkinsWorkspaceDir = env.JENKINS_HOME + "/" + "workspace"
 	librariesDirectory =  jenkinsWorkspaceDir + "/" + "${env.JOB_NAME}@libs"
 	libraryDirectory = librariesDirectory + "/" + libraryName
@@ -60,7 +60,7 @@ Map generatePropertiesMap(propertiesFiles) {
 		}
 		
 		fileName = fileRelativePath
-		log("INFO", "Importing properties from file ${fileDir}/${fileName}")
+		log("Importing properties from file ${fileDir}/${fileName}")
 		dotChar = fileName.indexOf(".")
 		key = fileName[ 0..(dotChar - 1) ].toUpperCase()
 		writeFile(file: "${fileName}", text: libraryResource("${fileDir}/${fileName}"), encoding: "UTF-8")
