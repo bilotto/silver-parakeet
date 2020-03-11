@@ -9,3 +9,7 @@ def call(String clusterName, Map nodeObjects){
 	return new Cluster(clusterName, nodeList, tools)
 }
 
+def call(String clusterName, List nodeList){
+	return new Cluster(clusterName, nodeList, tools)
+}
+
