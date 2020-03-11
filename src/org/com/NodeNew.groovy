@@ -97,6 +97,13 @@ class NodeNew {
 					log("DEBUG", "The nodes are the same")
 					//first, copy the file to the jump server from the jump server's side
 					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, this.homeDir)
+				} else {
+					//copy the file from file's node to file node's jumpServer
+					this.pipelineTools.tools.copy_file_from_node(file.node.user, file.node.hostname, file.fullPath, file.node.jumpServer.user, file.node.jumpServer.hostname, file.node.jumpServer.homeDir)
+					//copy the file from jumpServer to node
+					file.replaceNode(file.node.jumpServer, file.node.jumpServer.homeDir)
+					this.pipelineTools.tools.copy_file_to_node(file.node.user, file.node.hostname, file.fullPath, this.user, this.hostname, destinationDir)
+					this.pipelineTools.tools.transferFileBetweenHosts(file.node.jumpServer.user, file.node.jumpServer.hostname, file.fullPath, this.user, this.hostname, destinationDir)
 				}
 			}
 		} else {
