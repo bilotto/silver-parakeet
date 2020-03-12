@@ -29,7 +29,9 @@ List runCmdOnNodeSavingExitCodeAndStdout(String cmd) {
 	def command = "${cmd} > ${tempFilePath} 2>&1"
     rc = sh(script: "${command}", returnStatus: true)
     stdout = readFile(tempFilePath).trim()
-    log("DEBUG", "${stdout}")
+    if (stdout != "") {
+		log("DEBUG", "${stdout}")
+	}
     // Delete temporary file from the node
 	sh(script: this.printWithNoTrace('rm -f ') + tempFilePath, returnStatus: true)
     return [ rc, stdout ]
