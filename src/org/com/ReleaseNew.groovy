@@ -32,6 +32,7 @@ class ReleaseNew {
 	void pullBranch(){
 		def command = """
 			cd ${gitNode.gitPath}
+			git pull --all
 			git checkout ${this.gitBranch}
 			git pull
 			"""
